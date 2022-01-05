@@ -448,9 +448,6 @@
 <span id="446">446</span>
 <span id="447">447</span>
 <span id="448">448</span>
-<span id="449">449</span>
-<span id="450">450</span>
-<span id="451">451</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Types related to database connections</span>
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">all</span>(
@@ -511,7 +508,7 @@
 <span class="doccomment">/// Implementing a `Connection` in a third party crate requires</span>
 <span class="doccomment">/// enabling the</span>
 <span class="doccomment">/// `i-implement-a-third-party-backend-and-opt-into-breaking-changes`</span>
-<span class="doccomment">/// crate feature to access all nesessary type definitions.</span>
+<span class="doccomment">/// crate feature which grants access to some of diesel&#39;s implementation details.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// ## Wrapping an existing connection impl</span>
@@ -542,7 +539,7 @@
 <span class="doccomment">/// For performance reasons it may also be meaningful to cache already prepared statements.</span>
 <span class="doccomment">/// See [`StatementCache`](self::statement_cache::StatementCache)</span>
 <span class="doccomment">/// for a helper type to implement prepared statement caching. The [statement_cache](self::statement_cache)</span>
-<span class="doccomment">/// modul documentation contains details efficient prepared statement caching</span>
+<span class="doccomment">/// module documentation contains details about efficient prepared statement caching</span>
 <span class="doccomment">/// based on diesels query builder.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// It is required to implement at least the following parts:</span>
@@ -578,7 +575,7 @@
 <span class="doccomment">/// Additionally to anything mentioned in the previous section the following steps are required:</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// * Implement a custom backend type. See the documentation of [`Backend`] for details</span>
-<span class="doccomment">/// * Implement appropiated [`FromSql`](crate::deserialize::FromSql)/</span>
+<span class="doccomment">/// * Implement appropriate [`FromSql`](crate::deserialize::FromSql)/</span>
 <span class="doccomment">/// [`ToSql`](crate::serialize::ToSql) conversions.</span>
 <span class="doccomment">/// At least the following impls should be considered:</span>
 <span class="doccomment">///     * `i16`: `FromSql&lt;SmallInt, YourBackend&gt;`</span>
@@ -602,12 +599,9 @@
 <span class="doccomment">///  Otherwise the implementation used by the corresponding</span>
 <span class="doccomment">///  `Connection` in diesel can be reused.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// As implementations differ significantly between the supported backends</span>
-<span class="doccomment">/// we cannot give a one for all description here. Generally it&#39;s likely a</span>
-<span class="doccomment">/// good idea to follow the implementation of the connection</span>
-<span class="doccomment">/// in diesel, which uses a similar interface internally,</span>
-<span class="doccomment">/// at a heigh level to gain some idea how to implement your</span>
-<span class="doccomment">/// custom implementation.</span>
+<span class="doccomment">/// As these implementations will vary depending on the backend being used,</span>
+<span class="doccomment">/// we cannot give concrete examples here. We recommend looking at our existing</span>
+<span class="doccomment">/// implementations to see how you can implement your own connection.</span>
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">Connection</span>: <span class="ident">SimpleConnection</span> <span class="op">+</span> <span class="ident">Sized</span> <span class="op">+</span> <span class="ident">Send</span>
 <span class="kw">where</span>
     <span class="self">Self</span>: <span class="kw">for</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;b</span><span class="op">&gt;</span> <span class="ident">ConnectionGatWorkaround</span><span class="op">&lt;</span><span class="lifetime">&#39;a</span>, <span class="lifetime">&#39;b</span>, <span class="op">&lt;</span><span class="self">Self</span> <span class="kw">as</span> <span class="ident">Connection</span><span class="op">&gt;</span><span class="ident">::Backend</span><span class="op">&gt;</span>,
@@ -903,5 +897,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="diesel" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (23f69235a 2021-12-20)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="diesel" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (7d6f94817 2022-01-04)" ></div>
 </body></html>

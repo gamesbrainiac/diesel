@@ -55,6 +55,8 @@
 <span id="53">53</span>
 <span id="54">54</span>
 <span id="55">55</span>
+<span id="56">56</span>
+<span id="57">57</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::deserialize</span>::{<span class="self">self</span>, <span class="ident">FromSql</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::mysql</span>::{<span class="ident">Mysql</span>, <span class="ident">MysqlValue</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::serialize</span>::{<span class="self">self</span>, <span class="ident">IsNull</span>, <span class="ident">Output</span>, <span class="ident">ToSql</span>};
@@ -87,17 +89,19 @@
 <span class="kw">fn</span> <span class="ident">some_json_from_sql</span>() {
     <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::mysql::MysqlType</span>;
     <span class="kw">let</span> <span class="ident">input_json</span> <span class="op">=</span> <span class="string">b&quot;true&quot;</span>;
-    <span class="kw">let</span> <span class="ident">output_json</span>: <span class="ident">serde_json::Value</span> <span class="op">=</span>
-        <span class="ident">FromSql</span>::<span class="op">&lt;</span><span class="ident">sql_types::Json</span>, <span class="ident">Mysql</span><span class="op">&gt;</span><span class="ident">::from_sql</span>(<span class="ident">MysqlValue::new</span>(<span class="ident">input_json</span>, <span class="ident">MysqlType::String</span>))
-            .<span class="ident">unwrap</span>();
+    <span class="kw">let</span> <span class="ident">output_json</span>: <span class="ident">serde_json::Value</span> <span class="op">=</span> <span class="ident">FromSql</span>::<span class="op">&lt;</span><span class="ident">sql_types::Json</span>, <span class="ident">Mysql</span><span class="op">&gt;</span><span class="ident">::from_sql</span>(
+        <span class="ident">MysqlValue::new_internal</span>(<span class="ident">input_json</span>, <span class="ident">MysqlType::String</span>),
+    )
+    .<span class="ident">unwrap</span>();
     <span class="macro">assert_eq!</span>(<span class="ident">output_json</span>, <span class="ident">serde_json::Value::Bool</span>(<span class="bool-val">true</span>));
 }
 
 <span class="attribute">#[<span class="ident">test</span>]</span>
 <span class="kw">fn</span> <span class="ident">bad_json_from_sql</span>() {
     <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::mysql::MysqlType</span>;
-    <span class="kw">let</span> <span class="ident">uuid</span>: <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">serde_json::Value</span>, <span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span>
-        <span class="ident">FromSql</span>::<span class="op">&lt;</span><span class="ident">sql_types::Json</span>, <span class="ident">Mysql</span><span class="op">&gt;</span><span class="ident">::from_sql</span>(<span class="ident">MysqlValue::new</span>(<span class="string">b&quot;boom&quot;</span>, <span class="ident">MysqlType::String</span>));
+    <span class="kw">let</span> <span class="ident">uuid</span>: <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">serde_json::Value</span>, <span class="kw">_</span><span class="op">&gt;</span> <span class="op">=</span> <span class="ident">FromSql</span>::<span class="op">&lt;</span><span class="ident">sql_types::Json</span>, <span class="ident">Mysql</span><span class="op">&gt;</span><span class="ident">::from_sql</span>(
+        <span class="ident">MysqlValue::new_internal</span>(<span class="string">b&quot;boom&quot;</span>, <span class="ident">MysqlType::String</span>),
+    );
     <span class="macro">assert_eq!</span>(<span class="ident">uuid</span>.<span class="ident">unwrap_err</span>().<span class="ident">to_string</span>(), <span class="string">&quot;Invalid Json&quot;</span>);
 }
 
@@ -111,5 +115,5 @@
     );
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="diesel" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (23f69235a 2021-12-20)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="diesel" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (7d6f94817 2022-01-04)" ></div>
 </body></html>
