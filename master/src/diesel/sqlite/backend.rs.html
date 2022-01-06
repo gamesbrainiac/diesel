@@ -75,6 +75,9 @@
 <span id="75">75</span>
 <span id="76">76</span>
 <span id="77">77</span>
+<span id="78">78</span>
+<span id="79">79</span>
+<span id="80">80</span>
 </pre><pre class="rust"><code><span class="doccomment">//! The SQLite backend</span>
 
 <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::connection</span>::{<span class="ident">SqliteBindCollector</span>, <span class="ident">SqliteValue</span>};
@@ -131,7 +134,10 @@
 }
 
 <span class="kw">impl</span> <span class="ident">SqlDialect</span> <span class="kw">for</span> <span class="ident">Sqlite</span> {
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;returning_clauses_for_sqlite_3_35&quot;</span>))]</span>
     <span class="kw">type</span> <span class="ident">ReturningClause</span> <span class="op">=</span> <span class="ident">sql_dialect::returning_clause::DoesNotSupportReturningClause</span>;
+    <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;returning_clauses_for_sqlite_3_35&quot;</span>)]</span>
+    <span class="kw">type</span> <span class="ident">ReturningClause</span> <span class="op">=</span> <span class="ident">sql_dialect::returning_clause::PgLikeReturningClause</span>;
 
     <span class="kw">type</span> <span class="ident">OnConflictClause</span> <span class="op">=</span> <span class="ident">SqliteOnConflictClaues</span>;
 
