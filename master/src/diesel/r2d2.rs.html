@@ -309,6 +309,11 @@
 <span id="309">309</span>
 <span id="310">310</span>
 <span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Connection pooling via r2d2.</span>
 <span class="doccomment">//!</span>
 <span class="doccomment">//! Note: This module requires enabling the `r2d2` feature</span>
@@ -328,7 +333,10 @@
 <span class="kw">use</span> <span class="ident">std::marker::PhantomData</span>;
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::backend::Backend</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::connection</span>::{<span class="ident">ConnectionGatWorkaround</span>, <span class="ident">SimpleConnection</span>, <span class="ident">TransactionManager</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::connection::commit_error_processor</span>::{<span class="ident">CommitErrorOutcome</span>, <span class="ident">CommitErrorProcessor</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::connection</span>::{
+    <span class="ident">ConnectionGatWorkaround</span>, <span class="ident">SimpleConnection</span>, <span class="ident">TransactionManager</span>, <span class="ident">TransactionManagerStatus</span>,
+};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::expression::QueryMetadata</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::prelude</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::query_builder</span>::{<span class="ident">AsQuery</span>, <span class="ident">QueryFragment</span>, <span class="ident">QueryId</span>};
@@ -388,26 +396,16 @@
 <span class="kw">pub</span> <span class="kw">trait</span> <span class="ident">R2D2Connection</span>: <span class="ident">Connection</span> {
     <span class="doccomment">/// Check if a connection is still valid</span>
     <span class="kw">fn</span> <span class="ident">ping</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">QueryResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span>;
-}
 
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;postgres&quot;</span>)]</span>
-<span class="kw">impl</span> <span class="ident">R2D2Connection</span> <span class="kw">for</span> <span class="ident"><span class="kw">crate</span>::pg::PgConnection</span> {
-    <span class="kw">fn</span> <span class="ident">ping</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">QueryResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">execute</span>(<span class="string">&quot;SELECT 1&quot;</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
-    }
-}
-
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;mysql&quot;</span>)]</span>
-<span class="kw">impl</span> <span class="ident">R2D2Connection</span> <span class="kw">for</span> <span class="ident"><span class="kw">crate</span>::mysql::MysqlConnection</span> {
-    <span class="kw">fn</span> <span class="ident">ping</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">QueryResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">execute</span>(<span class="string">&quot;SELECT 1&quot;</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
-    }
-}
-
-<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sqlite&quot;</span>)]</span>
-<span class="kw">impl</span> <span class="ident">R2D2Connection</span> <span class="kw">for</span> <span class="ident"><span class="kw">crate</span>::sqlite::SqliteConnection</span> {
-    <span class="kw">fn</span> <span class="ident">ping</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">QueryResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
-        <span class="self">self</span>.<span class="ident">execute</span>(<span class="string">&quot;SELECT 1&quot;</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
+    <span class="doccomment">/// Checks if the connection is broken and should not be reused</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This method should return only contain a fast non-blocking check</span>
+    <span class="doccomment">/// if the connection is considered to be broken or not. See</span>
+    <span class="doccomment">/// [ManageConnection::has_broken] for details.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// The default implementation does not consider any connection as broken</span>
+    <span class="kw">fn</span> <span class="ident">is_broken</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">bool</span> {
+        <span class="bool-val">false</span>
     }
 }
 
@@ -426,8 +424,8 @@
         <span class="ident">conn</span>.<span class="ident">ping</span>().<span class="ident">map_err</span>(<span class="ident">Error::QueryError</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">has_broken</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">_conn</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">T</span>) -&gt; <span class="ident">bool</span> {
-        <span class="ident">std::thread::panicking</span>()
+    <span class="kw">fn</span> <span class="ident">has_broken</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">T</span>) -&gt; <span class="ident">bool</span> {
+        <span class="ident">std::thread::panicking</span>() <span class="op">|</span><span class="op">|</span> <span class="ident">conn</span>.<span class="ident">is_broken</span>()
     }
 }
 
@@ -449,6 +447,16 @@
 {
     <span class="kw">type</span> <span class="ident">Cursor</span> <span class="op">=</span> <span class="op">&lt;</span><span class="ident">M::Connection</span> <span class="kw">as</span> <span class="ident">ConnectionGatWorkaround</span><span class="op">&lt;</span><span class="lifetime">&#39;conn</span>, <span class="lifetime">&#39;query</span>, <span class="ident">DB</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::Cursor</span>;
     <span class="kw">type</span> <span class="ident">Row</span> <span class="op">=</span> <span class="op">&lt;</span><span class="ident">M::Connection</span> <span class="kw">as</span> <span class="ident">ConnectionGatWorkaround</span><span class="op">&lt;</span><span class="lifetime">&#39;conn</span>, <span class="lifetime">&#39;query</span>, <span class="ident">DB</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::Row</span>;
+}
+
+<span class="kw">impl</span><span class="op">&lt;</span><span class="ident">M</span><span class="op">&gt;</span> <span class="ident">CommitErrorProcessor</span> <span class="kw">for</span> <span class="ident">PooledConnection</span><span class="op">&lt;</span><span class="ident">M</span><span class="op">&gt;</span>
+<span class="kw">where</span>
+    <span class="ident">M</span>: <span class="ident">ManageConnection</span>,
+    <span class="ident">M::Connection</span>: <span class="ident">R2D2Connection</span> <span class="op">+</span> <span class="ident">CommitErrorProcessor</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span>,
+{
+    <span class="kw">fn</span> <span class="ident">process_commit_error</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">error</span>: <span class="ident"><span class="kw">crate</span>::result::Error</span>) -&gt; <span class="ident">CommitErrorOutcome</span> {
+        (<span class="kw-2">&amp;</span><span class="kw-2">*</span><span class="kw-2">*</span><span class="self">self</span>).<span class="ident">process_commit_error</span>(<span class="ident">error</span>)
+    }
 }
 
 <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">M</span><span class="op">&gt;</span> <span class="ident">Connection</span> <span class="kw">for</span> <span class="ident">PooledConnection</span><span class="op">&lt;</span><span class="ident">M</span><span class="op">&gt;</span>
@@ -524,8 +532,10 @@
         <span class="ident">T::commit_transaction</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="kw-2">*</span><span class="ident">conn</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">get_transaction_depth</span>(<span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">PooledConnection</span><span class="op">&lt;</span><span class="ident">M</span><span class="op">&gt;</span>) -&gt; <span class="ident">u32</span> {
-        <span class="ident">T::get_transaction_depth</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="kw-2">*</span><span class="ident">conn</span>)
+    <span class="kw">fn</span> <span class="ident">transaction_manager_status_mut</span>(
+        <span class="ident">conn</span>: <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">PooledConnection</span><span class="op">&lt;</span><span class="ident">M</span><span class="op">&gt;</span>,
+    ) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">TransactionManagerStatus</span> {
+        <span class="ident">T::transaction_manager_status_mut</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="kw-2">*</span><span class="ident">conn</span>)
     }
 }
 

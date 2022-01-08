@@ -671,6 +671,36 @@
 <span id="671">671</span>
 <span id="672">672</span>
 <span id="673">673</span>
+<span id="674">674</span>
+<span id="675">675</span>
+<span id="676">676</span>
+<span id="677">677</span>
+<span id="678">678</span>
+<span id="679">679</span>
+<span id="680">680</span>
+<span id="681">681</span>
+<span id="682">682</span>
+<span id="683">683</span>
+<span id="684">684</span>
+<span id="685">685</span>
+<span id="686">686</span>
+<span id="687">687</span>
+<span id="688">688</span>
+<span id="689">689</span>
+<span id="690">690</span>
+<span id="691">691</span>
+<span id="692">692</span>
+<span id="693">693</span>
+<span id="694">694</span>
+<span id="695">695</span>
+<span id="696">696</span>
+<span id="697">697</span>
+<span id="698">698</span>
+<span id="699">699</span>
+<span id="700">700</span>
+<span id="701">701</span>
+<span id="702">702</span>
+<span id="703">703</span>
 </pre><pre class="rust"><code><span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">libsqlite3_sys</span> <span class="kw">as</span> <span class="ident">ffi</span>;
 
 <span class="kw">mod</span> <span class="ident">bind_collector</span>;
@@ -692,6 +722,9 @@
 <span class="kw">use</span> <span class="ident"><span class="self">self</span>::statement_iterator</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident"><span class="self">self</span>::stmt</span>::{<span class="ident">Statement</span>, <span class="ident">StatementUse</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::SqliteAggregateFunction</span>;
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::connection::commit_error_processor</span>::{
+    <span class="ident">default_process_commit_error</span>, <span class="ident">CommitErrorOutcome</span>, <span class="ident">CommitErrorProcessor</span>,
+};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::connection</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::deserialize</span>::{<span class="ident">FromSqlRow</span>, <span class="ident">StaticallySizedRow</span>};
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::expression::QueryMetadata</span>;
@@ -731,6 +764,18 @@
 <span class="kw">impl</span><span class="op">&lt;</span><span class="lifetime">&#39;conn</span>, <span class="lifetime">&#39;query</span><span class="op">&gt;</span> <span class="ident">ConnectionGatWorkaround</span><span class="op">&lt;</span><span class="lifetime">&#39;conn</span>, <span class="lifetime">&#39;query</span>, <span class="ident">Sqlite</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">SqliteConnection</span> {
     <span class="kw">type</span> <span class="ident">Cursor</span> <span class="op">=</span> <span class="ident">StatementIterator</span><span class="op">&lt;</span><span class="lifetime">&#39;conn</span>, <span class="lifetime">&#39;query</span><span class="op">&gt;</span>;
     <span class="kw">type</span> <span class="ident">Row</span> <span class="op">=</span> <span class="ident"><span class="self">self</span>::row::SqliteRow</span><span class="op">&lt;</span><span class="lifetime">&#39;conn</span>, <span class="lifetime">&#39;query</span><span class="op">&gt;</span>;
+}
+
+<span class="kw">impl</span> <span class="ident">CommitErrorProcessor</span> <span class="kw">for</span> <span class="ident">SqliteConnection</span> {
+    <span class="kw">fn</span> <span class="ident">process_commit_error</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">error</span>: <span class="ident">Error</span>) -&gt; <span class="ident">CommitErrorOutcome</span> {
+        <span class="kw">let</span> <span class="ident">state</span> <span class="op">=</span> <span class="kw">match</span> <span class="self">self</span>.<span class="ident">transaction_state</span>.<span class="ident">status</span> {
+            <span class="ident">TransactionManagerStatus::InError</span> =&gt; {
+                <span class="kw">return</span> <span class="ident">CommitErrorOutcome::Throw</span>(<span class="ident">Error::BrokenTransaction</span>)
+            }
+            <span class="ident">TransactionManagerStatus::Valid</span>(<span class="kw-2">ref</span> <span class="ident">v</span>) =&gt; <span class="ident">v</span>,
+        };
+        <span class="ident">default_process_commit_error</span>(<span class="ident">state</span>, <span class="ident">error</span>)
+    }
 }
 
 <span class="kw">impl</span> <span class="ident">Connection</span> <span class="kw">for</span> <span class="ident">SqliteConnection</span> {
@@ -794,6 +839,21 @@
         <span class="self">Self</span>: <span class="ident">Sized</span>,
     {
         <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">transaction_state</span>
+    }
+}
+
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;r2d2&quot;</span>)]</span>
+<span class="kw">impl</span> <span class="ident"><span class="kw">crate</span>::r2d2::R2D2Connection</span> <span class="kw">for</span> <span class="ident"><span class="kw">crate</span>::sqlite::SqliteConnection</span> {
+    <span class="kw">fn</span> <span class="ident">ping</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">QueryResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">execute</span>(<span class="string">&quot;SELECT 1&quot;</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
+    }
+
+    <span class="kw">fn</span> <span class="ident">is_broken</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">bool</span> {
+        <span class="self">self</span>.<span class="ident">transaction_state</span>
+            .<span class="ident">status</span>
+            .<span class="ident">transaction_depth</span>()
+            .<span class="ident">map</span>(<span class="op">|</span><span class="ident">d</span><span class="op">|</span> <span class="ident">d</span>.<span class="ident">is_none</span>())
+            .<span class="ident">unwrap_or</span>(<span class="bool-val">true</span>)
     }
 }
 
