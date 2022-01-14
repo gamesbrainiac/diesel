@@ -1,4 +1,5 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `diesel&#x2F;src&#x2F;sqlite&#x2F;connection&#x2F;mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled ><script id="default-settings" ></script><script src="../../../../storage.js"></script><script src="../../../../crates.js"></script><noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon.svg"><style type="text/css">#crate-search{background-image:url("../../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../../../diesel/index.html'><div class='logo-container rust-logo'><img src='../../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" disabled autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../../../wheel.svg"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `diesel&#x2F;src&#x2F;sqlite&#x2F;connection&#x2F;mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="stylesheet" type="text/css" href="../../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../../light.css"  id="themeStyle"><link rel="stylesheet" type="text/css" href="../../../../dark.css" disabled ><link rel="stylesheet" type="text/css" href="../../../../ayu.css" disabled ><script id="default-settings" ></script><script src="../../../../storage.js"></script><script src="../../../../crates.js"></script><script defer src="../../../../main.js"></script><script defer src="../../../../source-script.js"></script><script defer src="../../../../source-files.js"></script>
+    <noscript><link rel="stylesheet" href="../../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../../favicon.svg"><style type="text/css">#crate-search{background-image:url("../../../../down-arrow.svg");}</style></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a href='../../../../diesel/index.html'><div class='logo-container rust-logo'><img src='../../../../rust-logo.png' alt='logo'></div></a></nav><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><nav class="sub"><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../../../wheel.svg"></a></div></form></nav><section id="main" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">  1</span>
 <span id="2">  2</span>
 <span id="3">  3</span>
 <span id="4">  4</span>
@@ -756,7 +757,7 @@
 <span class="kw">unsafe</span> <span class="kw">impl</span> <span class="ident">Send</span> <span class="kw">for</span> <span class="ident">SqliteConnection</span> {}
 
 <span class="kw">impl</span> <span class="ident">SimpleConnection</span> <span class="kw">for</span> <span class="ident">SqliteConnection</span> {
-    <span class="kw">fn</span> <span class="ident">batch_execute</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">query</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">QueryResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">batch_execute</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">query</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">QueryResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">raw_connection</span>.<span class="ident">exec</span>(<span class="ident">query</span>)
     }
 }
@@ -803,7 +804,7 @@
     }
 
     <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">query</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">QueryResult</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">execute</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">query</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">QueryResult</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">batch_execute</span>(<span class="ident">query</span>)<span class="question-mark">?</span>;
         <span class="prelude-val">Ok</span>(<span class="self">self</span>.<span class="ident">raw_connection</span>.<span class="ident">rows_affected_by_last_query</span>())
     }
@@ -824,7 +825,7 @@
     }
 
     <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-    <span class="kw">fn</span> <span class="ident">execute_returning_count</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>) -&gt; <span class="ident">QueryResult</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>
+    <span class="kw">fn</span> <span class="ident">execute_returning_count</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">source</span>: <span class="kw-2">&amp;</span><span class="ident">T</span>) -&gt; <span class="ident">QueryResult</span><span class="op">&lt;</span><span class="ident">usize</span><span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">T</span>: <span class="ident">QueryFragment</span><span class="op">&lt;</span><span class="ident"><span class="self">Self</span>::Backend</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">QueryId</span>,
     {
@@ -834,21 +835,21 @@
         <span class="prelude-val">Ok</span>(<span class="self">self</span>.<span class="ident">raw_connection</span>.<span class="ident">rows_affected_by_last_query</span>())
     }
 
-    <span class="kw">fn</span> <span class="ident">transaction_state</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">AnsiTransactionManager</span>
+    <span class="kw">fn</span> <span class="ident">transaction_state</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="kw-2">&amp;mut</span> <span class="ident">AnsiTransactionManager</span>
     <span class="kw">where</span>
         <span class="self">Self</span>: <span class="ident">Sized</span>,
     {
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">transaction_state</span>
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">transaction_state</span>
     }
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;r2d2&quot;</span>)]</span>
 <span class="kw">impl</span> <span class="ident"><span class="kw">crate</span>::r2d2::R2D2Connection</span> <span class="kw">for</span> <span class="ident"><span class="kw">crate</span>::sqlite::SqliteConnection</span> {
-    <span class="kw">fn</span> <span class="ident">ping</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">QueryResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
+    <span class="kw">fn</span> <span class="ident">ping</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">QueryResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="self">self</span>.<span class="ident">execute</span>(<span class="string">&quot;SELECT 1&quot;</span>).<span class="ident">map</span>(<span class="op">|</span><span class="kw">_</span><span class="op">|</span> ())
     }
 
-    <span class="kw">fn</span> <span class="ident">is_broken</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>) -&gt; <span class="ident">bool</span> {
+    <span class="kw">fn</span> <span class="ident">is_broken</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>) -&gt; <span class="ident">bool</span> {
         <span class="self">self</span>.<span class="ident">transaction_state</span>
             .<span class="ident">status</span>
             .<span class="ident">transaction_depth</span>()
@@ -879,9 +880,9 @@
     <span class="doccomment">/// })</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">immediate_transaction</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span>, <span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: <span class="ident">F</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">immediate_transaction</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span>, <span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">f</span>: <span class="ident">F</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>
     <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>,
+        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;mut</span> <span class="self">Self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>,
         <span class="ident">E</span>: <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
     {
         <span class="self">self</span>.<span class="ident">transaction_sql</span>(<span class="ident">f</span>, <span class="string">&quot;BEGIN IMMEDIATE&quot;</span>)
@@ -908,27 +909,27 @@
     <span class="doccomment">/// })</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">exclusive_transaction</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span>, <span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: <span class="ident">F</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">exclusive_transaction</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span>, <span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">f</span>: <span class="ident">F</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>
     <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>,
+        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;mut</span> <span class="self">Self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>,
         <span class="ident">E</span>: <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
     {
         <span class="self">self</span>.<span class="ident">transaction_sql</span>(<span class="ident">f</span>, <span class="string">&quot;BEGIN EXCLUSIVE&quot;</span>)
     }
 
-    <span class="kw">fn</span> <span class="ident">transaction_sql</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span>, <span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">f</span>: <span class="ident">F</span>, <span class="ident">sql</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>
+    <span class="kw">fn</span> <span class="ident">transaction_sql</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span>, <span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">f</span>: <span class="ident">F</span>, <span class="ident">sql</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>
     <span class="kw">where</span>
-        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">Self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>,
+        <span class="ident">F</span>: <span class="ident">FnOnce</span>(<span class="kw-2">&amp;mut</span> <span class="self">Self</span>) -&gt; <span class="prelude-ty">Result</span><span class="op">&lt;</span><span class="ident">T</span>, <span class="ident">E</span><span class="op">&gt;</span>,
         <span class="ident">E</span>: <span class="ident">From</span><span class="op">&lt;</span><span class="ident">Error</span><span class="op">&gt;</span>,
     {
-        <span class="ident">AnsiTransactionManager::begin_transaction_sql</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="self">self</span>, <span class="ident">sql</span>)<span class="question-mark">?</span>;
-        <span class="kw">match</span> <span class="ident">f</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="self">self</span>) {
+        <span class="ident">AnsiTransactionManager::begin_transaction_sql</span>(<span class="kw-2">&amp;mut</span> <span class="kw-2">*</span><span class="self">self</span>, <span class="ident">sql</span>)<span class="question-mark">?</span>;
+        <span class="kw">match</span> <span class="ident">f</span>(<span class="kw-2">&amp;mut</span> <span class="kw-2">*</span><span class="self">self</span>) {
             <span class="prelude-val">Ok</span>(<span class="ident">value</span>) =&gt; {
-                <span class="ident">AnsiTransactionManager::commit_transaction</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="self">self</span>)<span class="question-mark">?</span>;
+                <span class="ident">AnsiTransactionManager::commit_transaction</span>(<span class="kw-2">&amp;mut</span> <span class="kw-2">*</span><span class="self">self</span>)<span class="question-mark">?</span>;
                 <span class="prelude-val">Ok</span>(<span class="ident">value</span>)
             }
             <span class="prelude-val">Err</span>(<span class="ident">e</span>) =&gt; {
-                <span class="ident">AnsiTransactionManager::rollback_transaction</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="kw-2">*</span><span class="self">self</span>)<span class="question-mark">?</span>;
+                <span class="ident">AnsiTransactionManager::rollback_transaction</span>(<span class="kw-2">&amp;mut</span> <span class="kw-2">*</span><span class="self">self</span>)<span class="question-mark">?</span>;
                 <span class="prelude-val">Err</span>(<span class="ident">e</span>)
             }
         }
@@ -939,7 +940,7 @@
         <span class="ident">T</span>: <span class="ident">QueryFragment</span><span class="op">&lt;</span><span class="ident">Sqlite</span><span class="op">&gt;</span> <span class="op">+</span> <span class="ident">QueryId</span> <span class="op">+</span> <span class="lifetime">&#39;b</span>,
     {
         <span class="kw">let</span> <span class="ident">raw_connection</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="self">self</span>.<span class="ident">raw_connection</span>;
-        <span class="kw">let</span> <span class="ident">cache</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>.<span class="ident">statement_cache</span>;
+        <span class="kw">let</span> <span class="ident">cache</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="self">self</span>.<span class="ident">statement_cache</span>;
         <span class="kw">let</span> <span class="ident">statement</span> <span class="op">=</span> <span class="ident">cache</span>.<span class="ident">cached_statement</span>(<span class="kw-2">&amp;</span><span class="ident">source</span>, <span class="kw-2">&amp;</span>[], <span class="op">|</span><span class="ident">sql</span>, <span class="ident">is_cached</span><span class="op">|</span> {
             <span class="ident">Statement::prepare</span>(<span class="ident">raw_connection</span>, <span class="ident">sql</span>, <span class="ident">is_cached</span>)
         })<span class="question-mark">?</span>;
@@ -949,7 +950,7 @@
 
     <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">register_sql_function</span><span class="op">&lt;</span><span class="ident">ArgsSqlType</span>, <span class="ident">RetSqlType</span>, <span class="ident">Args</span>, <span class="ident">Ret</span>, <span class="ident">F</span><span class="op">&gt;</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">fn_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
         <span class="ident">deterministic</span>: <span class="ident">bool</span>,
         <span class="kw-2">mut</span> <span class="ident">f</span>: <span class="ident">F</span>,
@@ -985,7 +986,7 @@
 
     <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">register_aggregate_function</span><span class="op">&lt;</span><span class="ident">ArgsSqlType</span>, <span class="ident">RetSqlType</span>, <span class="ident">Args</span>, <span class="ident">Ret</span>, <span class="ident">A</span><span class="op">&gt;</span>(
-        <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>,
+        <span class="kw-2">&amp;mut</span> <span class="self">self</span>,
         <span class="ident">fn_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>,
     ) -&gt; <span class="ident">QueryResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span>
     <span class="kw">where</span>
@@ -1032,7 +1033,7 @@
     <span class="doccomment">/// })</span>
     <span class="doccomment">/// # }</span>
     <span class="doccomment">/// ```</span>
-    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">register_collation</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">collation_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">collation</span>: <span class="ident">F</span>) -&gt; <span class="ident">QueryResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span>
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">register_collation</span><span class="op">&lt;</span><span class="ident">F</span><span class="op">&gt;</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">collation_name</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="ident">collation</span>: <span class="ident">F</span>) -&gt; <span class="ident">QueryResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span>
     <span class="kw">where</span>
         <span class="ident">F</span>: <span class="ident">Fn</span>(<span class="kw-2">&amp;</span><span class="ident">str</span>, <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">std::cmp::Ordering</span> <span class="op">+</span> <span class="ident">Send</span> <span class="op">+</span> <span class="lifetime">&#39;static</span> <span class="op">+</span> <span class="ident">std::panic::UnwindSafe</span>,
     {
@@ -1072,7 +1073,7 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">prepared_statements_are_cached_when_run</span>() {
-        <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SqliteConnection::establish</span>(<span class="string">&quot;:memory:&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">SqliteConnection::establish</span>(<span class="string">&quot;:memory:&quot;</span>).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">query</span> <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::select</span>(<span class="number">1</span>.<span class="ident">into_sql</span>::<span class="op">&lt;</span><span class="ident">Integer</span><span class="op">&gt;</span>());
 
         <span class="macro">assert_eq!</span>(<span class="prelude-val">Ok</span>(<span class="number">1</span>), <span class="ident">query</span>.<span class="ident">get_result</span>(<span class="ident">connection</span>));
@@ -1082,7 +1083,7 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">sql_literal_nodes_are_not_cached</span>() {
-        <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SqliteConnection::establish</span>(<span class="string">&quot;:memory:&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">SqliteConnection::establish</span>(<span class="string">&quot;:memory:&quot;</span>).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">query</span> <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::select</span>(<span class="ident">sql</span>::<span class="op">&lt;</span><span class="ident">Integer</span><span class="op">&gt;</span>(<span class="string">&quot;1&quot;</span>));
 
         <span class="macro">assert_eq!</span>(<span class="prelude-val">Ok</span>(<span class="number">1</span>), <span class="ident">query</span>.<span class="ident">get_result</span>(<span class="ident">connection</span>));
@@ -1091,7 +1092,7 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">queries_containing_sql_literal_nodes_are_not_cached</span>() {
-        <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SqliteConnection::establish</span>(<span class="string">&quot;:memory:&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">SqliteConnection::establish</span>(<span class="string">&quot;:memory:&quot;</span>).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">one_as_expr</span> <span class="op">=</span> <span class="number">1</span>.<span class="ident">into_sql</span>::<span class="op">&lt;</span><span class="ident">Integer</span><span class="op">&gt;</span>();
         <span class="kw">let</span> <span class="ident">query</span> <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::select</span>(<span class="ident">one_as_expr</span>.<span class="ident">eq</span>(<span class="ident">sql</span>::<span class="op">&lt;</span><span class="ident">Integer</span><span class="op">&gt;</span>(<span class="string">&quot;1&quot;</span>)));
 
@@ -1101,7 +1102,7 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">queries_containing_in_with_vec_are_not_cached</span>() {
-        <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SqliteConnection::establish</span>(<span class="string">&quot;:memory:&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">SqliteConnection::establish</span>(<span class="string">&quot;:memory:&quot;</span>).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">one_as_expr</span> <span class="op">=</span> <span class="number">1</span>.<span class="ident">into_sql</span>::<span class="op">&lt;</span><span class="ident">Integer</span><span class="op">&gt;</span>();
         <span class="kw">let</span> <span class="ident">query</span> <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::select</span>(<span class="ident">one_as_expr</span>.<span class="ident">eq_any</span>(<span class="macro">vec!</span>[<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>]));
 
@@ -1111,7 +1112,7 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">queries_containing_in_with_subselect_are_cached</span>() {
-        <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SqliteConnection::establish</span>(<span class="string">&quot;:memory:&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">SqliteConnection::establish</span>(<span class="string">&quot;:memory:&quot;</span>).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="ident">one_as_expr</span> <span class="op">=</span> <span class="number">1</span>.<span class="ident">into_sql</span>::<span class="op">&lt;</span><span class="ident">Integer</span><span class="op">&gt;</span>();
         <span class="kw">let</span> <span class="ident">query</span> <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::select</span>(<span class="ident">one_as_expr</span>.<span class="ident">eq_any</span>(<span class="ident"><span class="kw">crate</span>::select</span>(<span class="ident">one_as_expr</span>)));
 
@@ -1124,7 +1125,7 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">register_custom_function</span>() {
-        <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SqliteConnection::establish</span>(<span class="string">&quot;:memory:&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">SqliteConnection::establish</span>(<span class="string">&quot;:memory:&quot;</span>).<span class="ident">unwrap</span>();
         <span class="ident">fun_case::register_impl</span>(<span class="ident">connection</span>, <span class="op">|</span><span class="ident">x</span>: <span class="ident">String</span><span class="op">|</span> {
             <span class="ident">x</span>.<span class="ident">chars</span>()
                 .<span class="ident">enumerate</span>()
@@ -1149,7 +1150,7 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">register_multiarg_function</span>() {
-        <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SqliteConnection::establish</span>(<span class="string">&quot;:memory:&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">SqliteConnection::establish</span>(<span class="string">&quot;:memory:&quot;</span>).<span class="ident">unwrap</span>();
         <span class="ident">my_add::register_impl</span>(<span class="ident">connection</span>, <span class="op">|</span><span class="ident">x</span>: <span class="ident">i32</span>, <span class="ident">y</span>: <span class="ident">i32</span><span class="op">|</span> <span class="ident">x</span> <span class="op">+</span> <span class="ident">y</span>).<span class="ident">unwrap</span>();
 
         <span class="kw">let</span> <span class="ident">added</span> <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::select</span>(<span class="ident">my_add</span>(<span class="number">1</span>, <span class="number">2</span>)).<span class="ident">get_result</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>(<span class="ident">connection</span>);
@@ -1160,7 +1161,7 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">register_noarg_function</span>() {
-        <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SqliteConnection::establish</span>(<span class="string">&quot;:memory:&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">SqliteConnection::establish</span>(<span class="string">&quot;:memory:&quot;</span>).<span class="ident">unwrap</span>();
         <span class="ident">answer::register_impl</span>(<span class="kw-2">&amp;</span><span class="ident">connection</span>, <span class="op">|</span><span class="op">|</span> <span class="number">42</span>).<span class="ident">unwrap</span>();
 
         <span class="kw">let</span> <span class="ident">answer</span> <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::select</span>(<span class="ident">answer</span>()).<span class="ident">get_result</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>(<span class="ident">connection</span>);
@@ -1169,7 +1170,7 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">register_nondeterministic_noarg_function</span>() {
-        <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SqliteConnection::establish</span>(<span class="string">&quot;:memory:&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">SqliteConnection::establish</span>(<span class="string">&quot;:memory:&quot;</span>).<span class="ident">unwrap</span>();
         <span class="ident">answer::register_nondeterministic_impl</span>(<span class="kw-2">&amp;</span><span class="ident">connection</span>, <span class="op">|</span><span class="op">|</span> <span class="number">42</span>).<span class="ident">unwrap</span>();
 
         <span class="kw">let</span> <span class="ident">answer</span> <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::select</span>(<span class="ident">answer</span>()).<span class="ident">get_result</span>::<span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span>(<span class="ident">connection</span>);
@@ -1180,7 +1181,7 @@
 
     <span class="attribute">#[<span class="ident">test</span>]</span>
     <span class="kw">fn</span> <span class="ident">register_nondeterministic_function</span>() {
-        <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SqliteConnection::establish</span>(<span class="string">&quot;:memory:&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">SqliteConnection::establish</span>(<span class="string">&quot;:memory:&quot;</span>).<span class="ident">unwrap</span>();
         <span class="kw">let</span> <span class="kw-2">mut</span> <span class="ident">y</span> <span class="op">=</span> <span class="number">0</span>;
         <span class="ident">add_counter::register_nondeterministic_impl</span>(<span class="ident">connection</span>, <span class="kw">move</span> <span class="op">|</span><span class="ident">x</span>: <span class="ident">i32</span><span class="op">|</span> {
             <span class="ident">y</span> <span class="op">+</span><span class="op">=</span> <span class="number">1</span>;
@@ -1208,7 +1209,7 @@
     <span class="kw">impl</span> <span class="ident">SqliteAggregateFunction</span><span class="op">&lt;</span><span class="ident">i32</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">MySum</span> {
         <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="ident">i32</span>;
 
-        <span class="kw">fn</span> <span class="ident">step</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, <span class="ident">expr</span>: <span class="ident">i32</span>) {
+        <span class="kw">fn</span> <span class="ident">step</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, <span class="ident">expr</span>: <span class="ident">i32</span>) {
             <span class="self">self</span>.<span class="ident">sum</span> <span class="op">+</span><span class="op">=</span> <span class="ident">expr</span>;
         }
 
@@ -1228,7 +1229,7 @@
     <span class="kw">fn</span> <span class="ident">register_aggregate_function</span>() {
         <span class="kw">use</span> <span class="ident"><span class="self">self</span>::my_sum_example::dsl</span>::<span class="kw-2">*</span>;
 
-        <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SqliteConnection::establish</span>(<span class="string">&quot;:memory:&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">SqliteConnection::establish</span>(<span class="string">&quot;:memory:&quot;</span>).<span class="ident">unwrap</span>();
         <span class="ident">connection</span>
             .<span class="ident">execute</span>(
                 <span class="string">&quot;CREATE TABLE my_sum_example (id integer primary key autoincrement, value integer)&quot;</span>,
@@ -1250,7 +1251,7 @@
     <span class="kw">fn</span> <span class="ident">register_aggregate_function_returns_finalize_default_on_empty_set</span>() {
         <span class="kw">use</span> <span class="ident"><span class="self">self</span>::my_sum_example::dsl</span>::<span class="kw-2">*</span>;
 
-        <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SqliteConnection::establish</span>(<span class="string">&quot;:memory:&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">SqliteConnection::establish</span>(<span class="string">&quot;:memory:&quot;</span>).<span class="ident">unwrap</span>();
         <span class="ident">connection</span>
             .<span class="ident">execute</span>(
                 <span class="string">&quot;CREATE TABLE my_sum_example (id integer primary key autoincrement, value integer)&quot;</span>,
@@ -1278,7 +1279,7 @@
     <span class="kw">impl</span><span class="op">&lt;</span><span class="ident">T</span>: <span class="ident">Default</span> <span class="op">+</span> <span class="ident">Ord</span> <span class="op">+</span> <span class="ident">Copy</span> <span class="op">+</span> <span class="ident">Clone</span><span class="op">&gt;</span> <span class="ident">SqliteAggregateFunction</span><span class="op">&lt;</span>(<span class="ident">T</span>, <span class="ident">T</span>, <span class="ident">T</span>)<span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">RangeMax</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span> {
         <span class="kw">type</span> <span class="ident">Output</span> <span class="op">=</span> <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>;
 
-        <span class="kw">fn</span> <span class="ident">step</span>(<span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="self">self</span>, (<span class="ident">x0</span>, <span class="ident">x1</span>, <span class="ident">x2</span>): (<span class="ident">T</span>, <span class="ident">T</span>, <span class="ident">T</span>)) {
+        <span class="kw">fn</span> <span class="ident">step</span>(<span class="kw-2">&amp;mut</span> <span class="self">self</span>, (<span class="ident">x0</span>, <span class="ident">x1</span>, <span class="ident">x2</span>): (<span class="ident">T</span>, <span class="ident">T</span>, <span class="ident">T</span>)) {
             <span class="kw">let</span> <span class="ident">max</span> <span class="op">=</span> <span class="kw">if</span> <span class="ident">x0</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">x1</span> <span class="op">&amp;&amp;</span> <span class="ident">x0</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">x2</span> {
                 <span class="ident">x0</span>
             } <span class="kw">else</span> <span class="kw">if</span> <span class="ident">x1</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">x0</span> <span class="op">&amp;&amp;</span> <span class="ident">x1</span> <span class="op">&gt;</span><span class="op">=</span> <span class="ident">x2</span> {
@@ -1312,7 +1313,7 @@
     <span class="kw">fn</span> <span class="ident">register_aggregate_multiarg_function</span>() {
         <span class="kw">use</span> <span class="ident"><span class="self">self</span>::range_max_example::dsl</span>::<span class="kw-2">*</span>;
 
-        <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SqliteConnection::establish</span>(<span class="string">&quot;:memory:&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">SqliteConnection::establish</span>(<span class="string">&quot;:memory:&quot;</span>).<span class="ident">unwrap</span>();
         <span class="ident">connection</span>
             .<span class="ident">execute</span>(
                 <span class="string">r#&quot;CREATE TABLE range_max_example (
@@ -1344,7 +1345,7 @@
     <span class="kw">fn</span> <span class="ident">register_collation_function</span>() {
         <span class="kw">use</span> <span class="ident"><span class="self">self</span>::my_collation_example::dsl</span>::<span class="kw-2">*</span>;
 
-        <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="kw-2">mut</span> <span class="ident">SqliteConnection::establish</span>(<span class="string">&quot;:memory:&quot;</span>).<span class="ident">unwrap</span>();
+        <span class="kw">let</span> <span class="ident">connection</span> <span class="op">=</span> <span class="kw-2">&amp;mut</span> <span class="ident">SqliteConnection::establish</span>(<span class="string">&quot;:memory:&quot;</span>).<span class="ident">unwrap</span>();
 
         <span class="ident">connection</span>
             .<span class="ident">register_collation</span>(<span class="string">&quot;RUSTNOCASE&quot;</span>, <span class="op">|</span><span class="ident">rhs</span>, <span class="ident">lhs</span><span class="op">|</span> {
@@ -1406,5 +1407,4 @@
 }
 </code></pre></div>
 </section><section id="search" class="content hidden"></section><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="diesel" data-search-index-js="../../../../search-index.js" data-search-js="../../../../search.js"></div>
-    <script src="../../../../main.js"></script><script src="../../../../source-script.js"></script><script src="../../../../source-files.js"></script>
 </body></html>
