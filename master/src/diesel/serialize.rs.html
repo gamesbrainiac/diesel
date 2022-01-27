@@ -445,7 +445,8 @@
 <span class="doccomment">/// database, you should use `i32::to_sql(x, out)` instead of writing to `out`</span>
 <span class="doccomment">/// yourself.)</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// Any types which implement this trait should also [`#[derive(AsExpression)]`].</span>
+<span class="doccomment">/// Any types which implement this trait should also</span>
+<span class="doccomment">/// [`#[derive(AsExpression)]`](derive@crate::expression::AsExpression).</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// ### Backend specific details</span>
 <span class="doccomment">///</span>
@@ -457,7 +458,6 @@
 <span class="doccomment">/// - For third party backends, consult that backend&#39;s documentation.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// [`MysqlType`]: ../mysql/enum.MysqlType.html</span>
-<span class="doccomment">/// [`#[derive(AsExpression)]`]: ../expression/derive.AsExpression.html;</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// ### Examples</span>
 <span class="doccomment">///</span>
