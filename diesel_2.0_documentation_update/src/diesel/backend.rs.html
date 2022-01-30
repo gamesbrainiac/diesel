@@ -348,11 +348,29 @@
 <span id="343">343</span>
 <span id="344">344</span>
 <span id="345">345</span>
+<span id="346">346</span>
+<span id="347">347</span>
+<span id="348">348</span>
+<span id="349">349</span>
+<span id="350">350</span>
+<span id="351">351</span>
+<span id="352">352</span>
+<span id="353">353</span>
+<span id="354">354</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Types which represent various database backends</span>
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::query_builder::QueryBuilder</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::sql_types</span>::{<span class="self">self</span>, <span class="ident">HasSqlType</span>, <span class="ident">TypeMetadata</span>};
 
+<span class="attribute">#[<span class="ident">cfg_attr</span>(
+    <span class="ident">not</span>(<span class="ident">any</span>(
+        <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;postgres_backend&quot;</span>,
+        <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;mysql_backend&quot;</span>,
+        <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sqlite&quot;</span>,
+        <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;i-implement-a-third-party-backend-and-opt-into-breaking-changes&quot;</span>
+    )),
+    <span class="ident">allow</span>(<span class="ident">unused_imports</span>)
+)]</span>
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">inline</span>)]</span>
 <span class="attribute">#[<span class="ident">diesel_derives::__diesel_public_if</span>(
     <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;i-implement-a-third-party-backend-and-opt-into-breaking-changes&quot;</span>
