@@ -1,6 +1,9 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `diesel&#x2F;src&#x2F;macros&#x2F;mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
-    <noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="sidebar"><div class="sidebar-menu" role="button">&#9776;</div><a class="sidebar-logo" href="../../../diesel/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.png" alt="logo"></div>
-        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../diesel/index.html"><img class="rust-logo" src="../../../rust-logo.png" alt="logo"></a><nav class="sub"><div class="theme-picker"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="18" height="18" alt="Pick another theme!" src="../../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><div><select id="crate-search"><option value="All crates">All crates</option></select><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"></div><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../settings.html" title="settings"><img width="18" height="18" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">   1</span>
+<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><meta name="generator" content="rustdoc"><meta name="description" content="Source of the Rust file `diesel/src/macros/mod.rs`."><meta name="keywords" content="rust, rustlang, rust-lang"><title>mod.rs - source</title><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Regular.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../FiraSans-Medium.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Regular.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceSerif4-Bold.ttf.woff2"><link rel="preload" as="font" type="font/woff2" crossorigin href="../../../SourceCodePro-Semibold.ttf.woff2"><link rel="stylesheet" type="text/css" href="../../../normalize.css"><link rel="stylesheet" type="text/css" href="../../../rustdoc.css" id="mainThemeStyle"><link rel="stylesheet" type="text/css" href="../../../ayu.css" disabled><link rel="stylesheet" type="text/css" href="../../../dark.css" disabled><link rel="stylesheet" type="text/css" href="../../../light.css" id="themeStyle"><script id="default-settings" ></script><script src="../../../storage.js"></script><script src="../../../crates.js"></script><script defer src="../../../main.js"></script><script defer src="../../../source-script.js"></script><script defer src="../../../source-files.js"></script>
+    <noscript><link rel="stylesheet" href="../../../noscript.css"></noscript><link rel="alternate icon" type="image/png" href="../../../favicon-16x16.png"><link rel="alternate icon" type="image/png" href="../../../favicon-32x32.png"><link rel="icon" type="image/svg+xml" href="../../../favicon.svg"></head><body class="rustdoc source"><!--[if lte IE 11]><div class="warning">This old browser is unsupported and will most likely display funky things.</div><![endif]--><nav class="mobile-topbar"><button class="sidebar-menu-toggle">&#9776;</button><a class="sidebar-logo" href="../../../diesel/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
+        </a><h2 class="location"></h2>
+    </nav>
+    <nav class="sidebar"><a class="sidebar-logo" href="../../../diesel/index.html"><div class="logo-container"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></div>
+        </a></nav><main><div class="width-limiter"><div class="sub-container"><a class="sub-logo-container" href="../../../diesel/index.html"><img class="rust-logo" src="../../../rust-logo.svg" alt="logo"></a><nav class="sub"><div class="theme-picker hidden"><button id="theme-picker" aria-label="Pick another theme!" aria-haspopup="menu" title="themes"><img width="22" height="22" alt="Pick another theme!" src="../../../brush.svg"></button><div id="theme-choices" role="menu"></div></div><form class="search-form"><div class="search-container"><span></span><input class="search-input" name="search" autocomplete="off" spellcheck="false" placeholder="Click or press ‘S’ to search, ‘?’ for more options…" type="search"><button type="button" id="help-button" title="help">?</button><a id="settings-menu" href="../../../settings.html" title="settings"><img width="22" height="22" alt="Change settings" src="../../../wheel.svg"></a></div></form></nav></div><section id="main-content" class="content"><div class="example-wrap"><pre class="line-numbers"><span id="1">   1</span>
 <span id="2">   2</span>
 <span id="3">   3</span>
 <span id="4">   4</span>
@@ -1691,6 +1694,68 @@
 <span id="1689">1689</span>
 <span id="1690">1690</span>
 <span id="1691">1691</span>
+<span id="1692">1692</span>
+<span id="1693">1693</span>
+<span id="1694">1694</span>
+<span id="1695">1695</span>
+<span id="1696">1696</span>
+<span id="1697">1697</span>
+<span id="1698">1698</span>
+<span id="1699">1699</span>
+<span id="1700">1700</span>
+<span id="1701">1701</span>
+<span id="1702">1702</span>
+<span id="1703">1703</span>
+<span id="1704">1704</span>
+<span id="1705">1705</span>
+<span id="1706">1706</span>
+<span id="1707">1707</span>
+<span id="1708">1708</span>
+<span id="1709">1709</span>
+<span id="1710">1710</span>
+<span id="1711">1711</span>
+<span id="1712">1712</span>
+<span id="1713">1713</span>
+<span id="1714">1714</span>
+<span id="1715">1715</span>
+<span id="1716">1716</span>
+<span id="1717">1717</span>
+<span id="1718">1718</span>
+<span id="1719">1719</span>
+<span id="1720">1720</span>
+<span id="1721">1721</span>
+<span id="1722">1722</span>
+<span id="1723">1723</span>
+<span id="1724">1724</span>
+<span id="1725">1725</span>
+<span id="1726">1726</span>
+<span id="1727">1727</span>
+<span id="1728">1728</span>
+<span id="1729">1729</span>
+<span id="1730">1730</span>
+<span id="1731">1731</span>
+<span id="1732">1732</span>
+<span id="1733">1733</span>
+<span id="1734">1734</span>
+<span id="1735">1735</span>
+<span id="1736">1736</span>
+<span id="1737">1737</span>
+<span id="1738">1738</span>
+<span id="1739">1739</span>
+<span id="1740">1740</span>
+<span id="1741">1741</span>
+<span id="1742">1742</span>
+<span id="1743">1743</span>
+<span id="1744">1744</span>
+<span id="1745">1745</span>
+<span id="1746">1746</span>
+<span id="1747">1747</span>
+<span id="1748">1748</span>
+<span id="1749">1749</span>
+<span id="1750">1750</span>
+<span id="1751">1751</span>
+<span id="1752">1752</span>
+<span id="1753">1753</span>
 </pre><pre class="rust"><code><span class="attribute">#![<span class="ident">cfg_attr</span>(<span class="ident">rustfmt</span>, <span class="ident">rustfmt_skip</span>)]</span> <span class="comment">// https://github.com/rust-lang-nursery/rustfmt/issues/2755</span>
 <span class="attribute">#![<span class="ident">allow</span>(<span class="ident">unused_parens</span>)]</span>
 
@@ -1807,9 +1872,9 @@
             <span class="macro-nonterminal">$</span><span class="macro-nonterminal">column_name</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::AppearsOnTable</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::query_source::joins::Join</span><span class="op">&lt;</span><span class="ident">Left</span>, <span class="ident">Right</span>, <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::query_source::joins::Inner</span><span class="op">&gt;</span><span class="op">&gt;</span>,
             <span class="ident">Left</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::query_source::AppearsInFromClause</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">table</span><span class="op">&gt;</span> <span class="op">+</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::query_source::QuerySource</span>,
             <span class="ident">Right</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::query_source::AppearsInFromClause</span><span class="op">&lt;</span><span class="macro-nonterminal">$</span><span class="macro-nonterminal">table</span><span class="op">&gt;</span> <span class="op">+</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::query_source::QuerySource</span>,
-            (<span class="ident">Left::Count</span>, <span class="ident">Right::Count</span>): <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::query_source::Pick</span><span class="op">&lt;</span><span class="ident">Left</span>, <span class="ident">Right</span><span class="op">&gt;</span>,
+            (<span class="ident">Left::Count</span>, <span class="ident">Right::Count</span>): <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::internal::table_macro::Pick</span><span class="op">&lt;</span><span class="ident">Left</span>, <span class="ident">Right</span><span class="op">&gt;</span>,
             <span class="self">Self</span>: <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::SelectableExpression</span><span class="op">&lt;</span>
-                <span class="op">&lt;</span>(<span class="ident">Left::Count</span>, <span class="ident">Right::Count</span>) <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::query_source::Pick</span><span class="op">&lt;</span><span class="ident">Left</span>, <span class="ident">Right</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::Selection</span>,
+                <span class="op">&lt;</span>(<span class="ident">Left::Count</span>, <span class="ident">Right::Count</span>) <span class="kw">as</span> <span class="macro-nonterminal">$</span><span class="macro-nonterminal">crate::internal::table_macro::Pick</span><span class="op">&lt;</span><span class="ident">Left</span>, <span class="ident">Right</span><span class="op">&gt;</span><span class="op">&gt;</span><span class="ident">::Selection</span>,
             <span class="op">&gt;</span>,
         {
         }
@@ -2849,19 +2914,70 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Example</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// ```ignore</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">/// # use diesel::{allow_tables_to_appear_in_same_query, table};</span>
+<span class="doccomment">/// #</span>
 <span class="doccomment">/// // This would be required to do `users.inner_join(posts.inner_join(comments))`</span>
 <span class="doccomment">/// allow_tables_to_appear_in_same_query!(comments, posts, users);</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// table! {</span>
+<span class="doccomment">///     comments {</span>
+<span class="doccomment">///         id -&gt; Integer,</span>
+<span class="doccomment">///         post_id -&gt; Integer,</span>
+<span class="doccomment">///         body -&gt; VarChar,</span>
+<span class="doccomment">///     }</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// table! {</span>
+<span class="doccomment">///    posts {</span>
+<span class="doccomment">///        id -&gt; Integer,</span>
+<span class="doccomment">///        user_id -&gt; Integer,</span>
+<span class="doccomment">///        title -&gt; VarChar,</span>
+<span class="doccomment">///    }</span>
+<span class="doccomment">/// }</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// table! {</span>
+<span class="doccomment">///     users {</span>
+<span class="doccomment">///        id -&gt; Integer,</span>
+<span class="doccomment">///        name -&gt; VarChar,</span>
+<span class="doccomment">///     }</span>
+<span class="doccomment">/// }</span>
 <span class="doccomment">/// ```</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// When more than two tables are passed, the relevant code is generated for</span>
 <span class="doccomment">/// every combination of those tables. This code would be equivalent to the</span>
 <span class="doccomment">/// previous example.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// ```ignore</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">/// # use diesel::{allow_tables_to_appear_in_same_query, table};</span>
+<span class="doccomment">/// # table! {</span>
+<span class="doccomment">/// #    comments {</span>
+<span class="doccomment">/// #        id -&gt; Integer,</span>
+<span class="doccomment">/// #        post_id -&gt; Integer,</span>
+<span class="doccomment">/// #        body -&gt; VarChar,</span>
+<span class="doccomment">/// #    }</span>
+<span class="doccomment">/// # }</span>
+<span class="doccomment">/// #</span>
+<span class="doccomment">/// # table! {</span>
+<span class="doccomment">/// #    posts {</span>
+<span class="doccomment">/// #        id -&gt; Integer,</span>
+<span class="doccomment">/// #        user_id -&gt; Integer,</span>
+<span class="doccomment">/// #        title -&gt; VarChar,</span>
+<span class="doccomment">/// #    }</span>
+<span class="doccomment">/// # }</span>
+<span class="doccomment">/// #</span>
+<span class="doccomment">/// # table! {</span>
+<span class="doccomment">/// #     users {</span>
+<span class="doccomment">/// #        id -&gt; Integer,</span>
+<span class="doccomment">/// #        name -&gt; VarChar,</span>
+<span class="doccomment">/// #     }</span>
+<span class="doccomment">/// # }</span>
+<span class="doccomment">/// #</span>
 <span class="doccomment">/// allow_tables_to_appear_in_same_query!(comments, posts);</span>
 <span class="doccomment">/// allow_tables_to_appear_in_same_query!(comments, users);</span>
 <span class="doccomment">/// allow_tables_to_appear_in_same_query!(posts, users);</span>
+<span class="doccomment">/// #</span>
+<span class="doccomment">/// # fn main() {}</span>
 <span class="doccomment">/// ```</span>
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="macro">macro_rules!</span> <span class="ident">allow_tables_to_appear_in_same_query</span> {
@@ -3014,20 +3130,31 @@
 <span class="doccomment">///</span>
 <span class="doccomment">/// # Example</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// ```ignore</span>
-<span class="doccomment">/// // This would be required to do</span>
-<span class="doccomment">/// // `users::table.inner_join(posts::table).group_by((users::name, users::hair_color, posts::id))`</span>
-<span class="doccomment">/// allow_columns_to_appear_in_same_group_by_clause!(users::name, users::hair_color, posts::id);</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">/// # include!(&quot;../doctest_setup.rs&quot;);</span>
+<span class="doccomment">/// # use crate::schema::{users, posts};</span>
+<span class="doccomment">/// // This would be required</span>
+<span class="doccomment">///</span>
+<span class="doccomment">/// allow_columns_to_appear_in_same_group_by_clause!(users::name, posts::id, posts::title);</span>
+<span class="doccomment">/// # fn main() {</span>
+<span class="doccomment">/// // to do implement the following join</span>
+<span class="doccomment">/// users::table.inner_join(posts::table).group_by((users::name, posts::id, posts::title))</span>
+<span class="doccomment">/// # ;</span>
+<span class="doccomment">/// # }</span>
 <span class="doccomment">/// ```</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// When more than two columns are passed, the relevant code is generated for</span>
 <span class="doccomment">/// every combination of those columns. This code would be equivalent to the</span>
 <span class="doccomment">/// previous example.</span>
 <span class="doccomment">///</span>
-<span class="doccomment">/// ```ignore</span>
-<span class="doccomment">/// allow_columns_to_appear_in_same_group_by_clause!(users::name, users::hair_color);</span>
+<span class="doccomment">/// ```</span>
+<span class="doccomment">/// # include!(&quot;../doctest_setup.rs&quot;);</span>
+<span class="doccomment">/// # use crate::schema::{users, posts};</span>
+<span class="doccomment">/// #</span>
+<span class="doccomment">/// allow_columns_to_appear_in_same_group_by_clause!(users::name, posts::title);</span>
 <span class="doccomment">/// allow_columns_to_appear_in_same_group_by_clause!(users::name, posts::id);</span>
-<span class="doccomment">/// allow_columns_to_appear_in_same_group_by_clause!(users::hair_color, posts::id);</span>
+<span class="doccomment">/// allow_columns_to_appear_in_same_group_by_clause!(posts::title, posts::id);</span>
+<span class="doccomment">/// # fn main() {}</span>
 <span class="doccomment">/// ```</span>
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="macro">macro_rules!</span> <span class="ident">allow_columns_to_appear_in_same_group_by_clause</span> {
@@ -3383,5 +3510,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="diesel" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.59.0-nightly (7d6f94817 2022-01-04)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="diesel" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (a00e130da 2022-01-29)" ></div>
 </body></html>
