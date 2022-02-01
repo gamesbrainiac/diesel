@@ -267,6 +267,58 @@
 <span id="266">266</span>
 <span id="267">267</span>
 <span id="268">268</span>
+<span id="269">269</span>
+<span id="270">270</span>
+<span id="271">271</span>
+<span id="272">272</span>
+<span id="273">273</span>
+<span id="274">274</span>
+<span id="275">275</span>
+<span id="276">276</span>
+<span id="277">277</span>
+<span id="278">278</span>
+<span id="279">279</span>
+<span id="280">280</span>
+<span id="281">281</span>
+<span id="282">282</span>
+<span id="283">283</span>
+<span id="284">284</span>
+<span id="285">285</span>
+<span id="286">286</span>
+<span id="287">287</span>
+<span id="288">288</span>
+<span id="289">289</span>
+<span id="290">290</span>
+<span id="291">291</span>
+<span id="292">292</span>
+<span id="293">293</span>
+<span id="294">294</span>
+<span id="295">295</span>
+<span id="296">296</span>
+<span id="297">297</span>
+<span id="298">298</span>
+<span id="299">299</span>
+<span id="300">300</span>
+<span id="301">301</span>
+<span id="302">302</span>
+<span id="303">303</span>
+<span id="304">304</span>
+<span id="305">305</span>
+<span id="306">306</span>
+<span id="307">307</span>
+<span id="308">308</span>
+<span id="309">309</span>
+<span id="310">310</span>
+<span id="311">311</span>
+<span id="312">312</span>
+<span id="313">313</span>
+<span id="314">314</span>
+<span id="315">315</span>
+<span id="316">316</span>
+<span id="317">317</span>
+<span id="318">318</span>
+<span id="319">319</span>
+<span id="320">320</span>
 </pre><pre class="rust"><code><span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">percent_encoding</span>;
 <span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">url</span>;
 
@@ -276,6 +328,8 @@
 <span class="kw">use</span> <span class="ident">std::ffi</span>::{<span class="ident">CStr</span>, <span class="ident">CString</span>};
 
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::result</span>::{<span class="ident">ConnectionError</span>, <span class="ident">ConnectionResult</span>};
+
+<span class="kw">use</span> <span class="ident">mysqlclient_sys::mysql_ssl_mode</span>;
 
 <span class="macro">bitflags::bitflags!</span> {
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">CapabilityFlags</span>: <span class="ident">u32</span> {
@@ -315,6 +369,7 @@
     <span class="ident">port</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">u16</span><span class="op">&gt;</span>,
     <span class="ident">unix_socket</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">CString</span><span class="op">&gt;</span>,
     <span class="ident">client_flags</span>: <span class="ident">CapabilityFlags</span>,
+    <span class="ident">ssl_mode</span>: <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">mysql_ssl_mode</span><span class="op">&gt;</span>,
 }
 
 <span class="kw">impl</span> <span class="ident">ConnectionOptions</span> {
@@ -339,6 +394,24 @@
 
         <span class="kw">let</span> <span class="ident">unix_socket</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">query_pairs</span>.<span class="ident">get</span>(<span class="string">&quot;unix_socket&quot;</span>) {
             <span class="prelude-val">Some</span>(<span class="ident">v</span>) =&gt; <span class="prelude-val">Some</span>(<span class="ident">CString::new</span>(<span class="ident">v</span>.<span class="ident">as_bytes</span>())<span class="question-mark">?</span>),
+            <span class="kw">_</span> =&gt; <span class="prelude-val">None</span>,
+        };
+
+        <span class="kw">let</span> <span class="ident">ssl_mode</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">query_pairs</span>.<span class="ident">get</span>(<span class="string">&quot;ssl_mode&quot;</span>) {
+            <span class="prelude-val">Some</span>(<span class="ident">v</span>) =&gt; {
+                <span class="kw">let</span> <span class="ident">ssl_mode</span> <span class="op">=</span> <span class="kw">match</span> <span class="ident">v</span>.<span class="ident">to_lowercase</span>().<span class="ident">as_str</span>() {
+                    <span class="string">&quot;disabled&quot;</span> =&gt; <span class="ident">mysql_ssl_mode::SSL_MODE_DISABLED</span>,
+                    <span class="string">&quot;preferred&quot;</span> =&gt; <span class="ident">mysql_ssl_mode::SSL_MODE_PREFERRED</span>,
+                    <span class="string">&quot;required&quot;</span> =&gt; <span class="ident">mysql_ssl_mode::SSL_MODE_REQUIRED</span>,
+                    <span class="string">&quot;verify_ca&quot;</span> =&gt; <span class="ident">mysql_ssl_mode::SSL_MODE_VERIFY_CA</span>,
+                    <span class="string">&quot;verify_identity&quot;</span> =&gt; <span class="ident">mysql_ssl_mode::SSL_MODE_VERIFY_IDENTITY</span>,
+                    <span class="kw">_</span> =&gt; {
+                        <span class="kw">let</span> <span class="ident">msg</span> <span class="op">=</span> <span class="string">&quot;unknown ssl_mode&quot;</span>;
+                        <span class="kw">return</span> <span class="prelude-val">Err</span>(<span class="ident">ConnectionError::InvalidConnectionUrl</span>(<span class="ident">msg</span>.<span class="ident">into</span>()));
+                    }
+                };
+                <span class="prelude-val">Some</span>(<span class="ident">ssl_mode</span>)
+            }
             <span class="kw">_</span> =&gt; <span class="prelude-val">None</span>,
         };
 
@@ -370,6 +443,7 @@
             <span class="ident">port</span>: <span class="ident">url</span>.<span class="ident">port</span>(),
             <span class="ident">unix_socket</span>: <span class="ident">unix_socket</span>,
             <span class="ident">client_flags</span>: <span class="ident">client_flags</span>,
+            <span class="ident">ssl_mode</span>: <span class="ident">ssl_mode</span>,
         })
     }
 
@@ -399,6 +473,10 @@
 
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">client_flags</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">CapabilityFlags</span> {
         <span class="self">self</span>.<span class="ident">client_flags</span>
+    }
+
+    <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">ssl_mode</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="prelude-ty">Option</span><span class="op">&lt;</span><span class="ident">mysql_ssl_mode</span><span class="op">&gt;</span> {
+        <span class="self">self</span>.<span class="ident">ssl_mode</span>
     }
 }
 
@@ -533,6 +611,32 @@
     <span class="macro">assert_eq!</span>(
         <span class="ident">CString::new</span>(<span class="ident">unix_socket</span>).<span class="ident">unwrap</span>(),
         <span class="ident">conn_opts</span>.<span class="ident">unix_socket</span>.<span class="ident">unwrap</span>()
+    );
+}
+
+<span class="attribute">#[<span class="ident">test</span>]</span>
+<span class="kw">fn</span> <span class="ident">ssl_mode</span>() {
+    <span class="kw">let</span> <span class="ident">ssl_mode</span> <span class="op">=</span> <span class="op">|</span><span class="ident">url</span><span class="op">|</span> <span class="ident">ConnectionOptions::parse</span>(<span class="ident">url</span>).<span class="ident">unwrap</span>().<span class="ident">ssl_mode</span>();
+    <span class="macro">assert_eq!</span>(<span class="ident">ssl_mode</span>(<span class="string">&quot;mysql://localhost&quot;</span>), <span class="prelude-val">None</span>);
+    <span class="macro">assert_eq!</span>(
+        <span class="ident">ssl_mode</span>(<span class="string">&quot;mysql://localhost?ssl_mode=disabled&quot;</span>),
+        <span class="prelude-val">Some</span>(<span class="ident">mysql_ssl_mode::SSL_MODE_DISABLED</span>)
+    );
+    <span class="macro">assert_eq!</span>(
+        <span class="ident">ssl_mode</span>(<span class="string">&quot;mysql://localhost?ssl_mode=PREFERRED&quot;</span>),
+        <span class="prelude-val">Some</span>(<span class="ident">mysql_ssl_mode::SSL_MODE_PREFERRED</span>)
+    );
+    <span class="macro">assert_eq!</span>(
+        <span class="ident">ssl_mode</span>(<span class="string">&quot;mysql://localhost?ssl_mode=required&quot;</span>),
+        <span class="prelude-val">Some</span>(<span class="ident">mysql_ssl_mode::SSL_MODE_REQUIRED</span>)
+    );
+    <span class="macro">assert_eq!</span>(
+        <span class="ident">ssl_mode</span>(<span class="string">&quot;mysql://localhost?ssl_mode=VERIFY_CA&quot;</span>),
+        <span class="prelude-val">Some</span>(<span class="ident">mysql_ssl_mode::SSL_MODE_VERIFY_CA</span>)
+    );
+    <span class="macro">assert_eq!</span>(
+        <span class="ident">ssl_mode</span>(<span class="string">&quot;mysql://localhost?ssl_mode=verify_identity&quot;</span>),
+        <span class="prelude-val">Some</span>(<span class="ident">mysql_ssl_mode::SSL_MODE_VERIFY_IDENTITY</span>)
     );
 }
 </code></pre></div>

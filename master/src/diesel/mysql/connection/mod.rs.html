@@ -217,6 +217,13 @@
 <span id="216">216</span>
 <span id="217">217</span>
 <span id="218">218</span>
+<span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
 </pre><pre class="rust"><code><span class="kw">mod</span> <span class="ident">bind</span>;
 <span class="kw">mod</span> <span class="ident">raw</span>;
 <span class="kw">mod</span> <span class="ident">stmt</span>;
@@ -275,6 +282,13 @@
     <span class="kw">type</span> <span class="ident">Backend</span> <span class="op">=</span> <span class="ident">Mysql</span>;
     <span class="kw">type</span> <span class="ident">TransactionManager</span> <span class="op">=</span> <span class="ident">AnsiTransactionManager</span>;
 
+    <span class="doccomment">/// Establishes a new connection to the MySQL database</span>
+    <span class="doccomment">/// `database_url` may be enhanced by GET parameters</span>
+    <span class="doccomment">/// `mysql://[user[:password]@]host/database_name[?unix_socket=socket-path&amp;ssl_mode=SSL_MODE*]`</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// * `unix_socket` excepts the path to the unix socket</span>
+    <span class="doccomment">/// * `ssl_mode` expects a value defined for MySQL client command option `--ssl-mode`</span>
+    <span class="doccomment">/// See &lt;https://dev.mysql.com/doc/refman/5.7/en/connection-options.html#option_general_ssl-mode&gt;</span>
     <span class="kw">fn</span> <span class="ident">establish</span>(<span class="ident">database_url</span>: <span class="kw-2">&amp;</span><span class="ident">str</span>) -&gt; <span class="ident">ConnectionResult</span><span class="op">&lt;</span><span class="self">Self</span><span class="op">&gt;</span> {
         <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::result::ConnectionError::CouldntSetupConfiguration</span>;
 
