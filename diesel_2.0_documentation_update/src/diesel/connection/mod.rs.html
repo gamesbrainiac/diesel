@@ -462,6 +462,42 @@
 <span id="457">457</span>
 <span id="458">458</span>
 <span id="459">459</span>
+<span id="460">460</span>
+<span id="461">461</span>
+<span id="462">462</span>
+<span id="463">463</span>
+<span id="464">464</span>
+<span id="465">465</span>
+<span id="466">466</span>
+<span id="467">467</span>
+<span id="468">468</span>
+<span id="469">469</span>
+<span id="470">470</span>
+<span id="471">471</span>
+<span id="472">472</span>
+<span id="473">473</span>
+<span id="474">474</span>
+<span id="475">475</span>
+<span id="476">476</span>
+<span id="477">477</span>
+<span id="478">478</span>
+<span id="479">479</span>
+<span id="480">480</span>
+<span id="481">481</span>
+<span id="482">482</span>
+<span id="483">483</span>
+<span id="484">484</span>
+<span id="485">485</span>
+<span id="486">486</span>
+<span id="487">487</span>
+<span id="488">488</span>
+<span id="489">489</span>
+<span id="490">490</span>
+<span id="491">491</span>
+<span id="492">492</span>
+<span id="493">493</span>
+<span id="494">494</span>
+<span id="495">495</span>
 </pre><pre class="rust"><code><span class="doccomment">//! Types related to database connections</span>
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;i-implement-a-third-party-backend-and-opt-into-breaking-changes&quot;</span>)]</span>
@@ -542,7 +578,14 @@
 <span class="doccomment">/// wrapped connection implementation may contain a customized implementation.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// To allow the integration of your new connection type with other diesel features</span>
-<span class="doccomment">/// it may be useful to also implement [`R2D2Connection`](crate::r2d2::R2D2Connection)</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(
+    <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;r2d2&quot;</span>,
+    <span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;it may be useful to also implement [`R2D2Connection`](crate::r2d2::R2D2Connection)&quot;</span>
+)]</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(
+    <span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;r2d2&quot;</span>),
+    <span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;it may be useful to also implement `R2D2Connection`&quot;</span>
+)]</span>
 <span class="doccomment">/// and [`MigrationConnection`](crate::migration::MigrationConnection).</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// ## Provide a new connection implementation for an existing backend</span>
@@ -558,8 +601,23 @@
 <span class="doccomment">/// * [`Connection::execute`]</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// For performance reasons it may also be meaningful to cache already prepared statements.</span>
-<span class="doccomment">/// See [`StatementCache`](self::statement_cache::StatementCache)</span>
-<span class="doccomment">/// for a helper type to implement prepared statement caching. The [statement_cache](self::statement_cache)</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(
+    <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;i-implement-a-third-party-backend-and-opt-into-breaking-changes&quot;</span>,
+    <span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;See [`StatementCache`](self::statement_cache::StatementCache)&quot;</span>
+)]</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(
+    <span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;i-implement-a-third-party-backend-and-opt-into-breaking-changes&quot;</span>),
+    <span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;See `StatementCache`&quot;</span>
+)]</span>
+<span class="doccomment">/// for a helper type to implement prepared statement caching.</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(
+    <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;i-implement-a-third-party-backend-and-opt-into-breaking-changes&quot;</span>,
+    <span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;The [statement_cache](self::statement_cache)&quot;</span>
+)]</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(
+    <span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;i-implement-a-third-party-backend-and-opt-into-breaking-changes&quot;</span>),
+    <span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;The statement_cache&quot;</span>
+)]</span>
 <span class="doccomment">/// module documentation contains details about efficient prepared statement caching</span>
 <span class="doccomment">/// based on diesels query builder.</span>
 <span class="doccomment">///</span>
@@ -577,12 +635,26 @@
 <span class="doccomment">///  `Connection` in diesel can be reused.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// To allow the integration of your new connection type with other diesel features</span>
-<span class="doccomment">/// it may be useful to also implement [`R2D2Connection`](crate::r2d2::R2D2Connection)</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(
+    <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;r2d2&quot;</span>,
+    <span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;it may be useful to also implement [`R2D2Connection`](crate::r2d2::R2D2Connection)&quot;</span>
+)]</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(
+    <span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;r2d2&quot;</span>),
+    <span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;it may be useful to also implement `R2D2Connection`&quot;</span>
+)]</span>
 <span class="doccomment">/// and [`MigrationConnection`](crate::migration::MigrationConnection).</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// The exact implementation of the `Connection` trait depends on the interface provided</span>
 <span class="doccomment">/// by the connection crate/library. A struct implementing `Connection` should</span>
-<span class="doccomment">/// likely contain a [`StatementCache`](self::statement_cache::StatementCache)</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(
+    <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;i-implement-a-third-party-backend-and-opt-into-breaking-changes&quot;</span>,
+    <span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;likely contain a [`StatementCache`](self::statement_cache::StatementCache)&quot;</span>
+)]</span>
+<span class="attribute">#[<span class="ident">cfg_attr</span>(
+    <span class="ident">not</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;i-implement-a-third-party-backend-and-opt-into-breaking-changes&quot;</span>),
+    <span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;likely contain a `StatementCache`&quot;</span>
+)]</span>
 <span class="doccomment">/// to cache prepared statements efficiently.</span>
 <span class="doccomment">///</span>
 <span class="doccomment">/// As implementations differ significantly between the supported backends</span>
