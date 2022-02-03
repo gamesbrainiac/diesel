@@ -25,9 +25,10 @@
 <span id="20">20</span>
 <span id="21">21</span>
 <span id="22">22</span>
+<span id="23">23</span>
 </pre><pre class="rust"><code><span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::expression::expression_types::NotSelectable</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::pg::Pg</span>;
-<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::sql_types</span>::{<span class="ident">Bigint</span>, <span class="ident">Bool</span>, <span class="ident">Inet</span>};
+<span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::sql_types</span>::{<span class="ident">Bigint</span>, <span class="ident">Bool</span>, <span class="ident">Inet</span>, <span class="ident">Jsonb</span>};
 
 <span class="macro">__diesel_infix_operator!</span>(<span class="ident">IsDistinctFrom</span>, <span class="string">&quot; IS DISTINCT FROM &quot;</span>, <span class="ident">ConstantNullability</span> <span class="ident">Bool</span>, <span class="ident">backend</span>: <span class="ident">Pg</span>);
 <span class="macro">__diesel_infix_operator!</span>(<span class="ident">IsNotDistinctFrom</span>, <span class="string">&quot; IS NOT DISTINCT FROM &quot;</span>, <span class="ident">ConstantNullability</span> <span class="ident">Bool</span>, <span class="ident">backend</span>: <span class="ident">Pg</span>);
@@ -47,6 +48,7 @@
 <span class="macro">infix_operator!</span>(<span class="ident">AndNet</span>, <span class="string">&quot; &amp; &quot;</span>, <span class="ident">Inet</span>, <span class="ident">backend</span>: <span class="ident">Pg</span>);
 <span class="macro">infix_operator!</span>(<span class="ident">OrNet</span>, <span class="string">&quot; | &quot;</span>, <span class="ident">Inet</span>, <span class="ident">backend</span>: <span class="ident">Pg</span>);
 <span class="macro">infix_operator!</span>(<span class="ident">DifferenceNet</span>, <span class="string">&quot; - &quot;</span>, <span class="ident">Bigint</span>, <span class="ident">backend</span>: <span class="ident">Pg</span>);
+<span class="macro">infix_operator!</span>(<span class="ident">ConcatJsonb</span>, <span class="string">&quot; || &quot;</span>, <span class="ident">Jsonb</span>, <span class="ident">backend</span>: <span class="ident">Pg</span>);
 </code></pre></div>
 </section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="diesel" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (27f5d830e 2022-02-02)" ></div>
 </body></html>

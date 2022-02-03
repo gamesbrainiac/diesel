@@ -222,6 +222,23 @@
 <span id="217">217</span>
 <span id="218">218</span>
 <span id="219">219</span>
+<span id="220">220</span>
+<span id="221">221</span>
+<span id="222">222</span>
+<span id="223">223</span>
+<span id="224">224</span>
+<span id="225">225</span>
+<span id="226">226</span>
+<span id="227">227</span>
+<span id="228">228</span>
+<span id="229">229</span>
+<span id="230">230</span>
+<span id="231">231</span>
+<span id="232">232</span>
+<span id="233">233</span>
+<span id="234">234</span>
+<span id="235">235</span>
+<span id="236">236</span>
 </pre><pre class="rust"><code><span class="kw">extern</span> <span class="kw">crate</span> <span class="ident">mysqlclient_sys</span> <span class="kw">as</span> <span class="ident">ffi</span>;
 
 <span class="kw">use</span> <span class="ident">std::ffi::CStr</span>;
@@ -271,6 +288,10 @@
         <span class="kw">let</span> <span class="ident">port</span> <span class="op">=</span> <span class="ident">connection_options</span>.<span class="ident">port</span>();
         <span class="kw">let</span> <span class="ident">unix_socket</span> <span class="op">=</span> <span class="ident">connection_options</span>.<span class="ident">unix_socket</span>();
         <span class="kw">let</span> <span class="ident">client_flags</span> <span class="op">=</span> <span class="ident">connection_options</span>.<span class="ident">client_flags</span>();
+
+        <span class="kw">if</span> <span class="kw">let</span> <span class="prelude-val">Some</span>(<span class="ident">ssl_mode</span>) <span class="op">=</span> <span class="ident">connection_options</span>.<span class="ident">ssl_mode</span>() {
+            <span class="self">self</span>.<span class="ident">set_ssl_mode</span>(<span class="ident">ssl_mode</span>)
+        }
 
         <span class="kw">unsafe</span> {
             <span class="comment">// Make sure you don&#39;t use the fake one!</span>
@@ -403,6 +424,19 @@
     <span class="kw">fn</span> <span class="ident">next_result</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">QueryResult</span><span class="op">&lt;</span>()<span class="op">&gt;</span> {
         <span class="kw">unsafe</span> { <span class="ident">ffi::mysql_next_result</span>(<span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>()) };
         <span class="self">self</span>.<span class="ident">did_an_error_occur</span>()
+    }
+
+    <span class="kw">fn</span> <span class="ident">set_ssl_mode</span>(<span class="kw-2">&amp;</span><span class="self">self</span>, <span class="ident">ssl_mode</span>: <span class="ident">mysqlclient_sys::mysql_ssl_mode</span>) {
+        <span class="kw">let</span> <span class="ident">v</span> <span class="op">=</span> <span class="ident">ssl_mode</span> <span class="kw">as</span> <span class="ident">u32</span>;
+        <span class="kw">let</span> <span class="ident">v_ptr</span>: <span class="kw-2">*const</span> <span class="ident">u32</span> <span class="op">=</span> <span class="kw-2">&amp;</span><span class="ident">v</span>;
+        <span class="kw">let</span> <span class="ident">n</span> <span class="op">=</span> <span class="ident">ptr::NonNull::new</span>(<span class="ident">v_ptr</span> <span class="kw">as</span> <span class="kw-2">*mut</span> <span class="ident">u32</span>).<span class="ident">expect</span>(<span class="string">&quot;NonNull::new failed&quot;</span>);
+        <span class="kw">unsafe</span> {
+            <span class="ident">mysqlclient_sys::mysql_options</span>(
+                <span class="self">self</span>.<span class="number">0</span>.<span class="ident">as_ptr</span>(),
+                <span class="ident">mysqlclient_sys::mysql_option::MYSQL_OPT_SSL_MODE</span>,
+                <span class="ident">n</span>.<span class="ident">as_ptr</span>() <span class="kw">as</span> <span class="kw-2">*const</span> <span class="ident">std::ffi::c_void</span>,
+            )
+        };
     }
 }
 
