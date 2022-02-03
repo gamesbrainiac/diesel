@@ -484,9 +484,9 @@
     <span class="doccomment">/// Get the current lenght of the statement cache</span>
     <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">unreachable_pub</span>)]</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(
-        <span class="ident">test</span>,
         <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;i-implement-a-third-party-backend-and-opt-into-breaking-changes&quot;</span>,
-        <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;postgres&quot;</span>
+        <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;postgres&quot;</span>,
+        <span class="ident">all</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sqlite&quot;</span>, <span class="ident">test</span>)
     ))]</span>
     <span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">len</span>(<span class="kw-2">&amp;</span><span class="self">self</span>) -&gt; <span class="ident">usize</span> {
         <span class="self">self</span>.<span class="ident">cache</span>.<span class="ident">len</span>()
@@ -654,5 +654,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="diesel" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (a00e130da 2022-01-29)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="diesel" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (27f5d830e 2022-02-02)" ></div>
 </body></html>

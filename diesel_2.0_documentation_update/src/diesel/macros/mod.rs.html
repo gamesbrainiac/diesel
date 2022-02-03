@@ -2092,8 +2092,8 @@
 <span class="doccomment">/// ```</span>
 
 <span class="attribute">#[<span class="ident">allow</span>(<span class="ident">deprecated</span>)]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span><span class="op">=</span><span class="string">&quot;huge-tables&quot;</span>, <span class="ident">deprecated</span><span class="op">=</span><span class="string">&quot;`huge-tables` is deprecated in favor of `64-column-tables`&quot;</span>)]</span>
-<span class="attribute">#[<span class="ident">cfg_attr</span>(<span class="ident">feature</span><span class="op">=</span><span class="string">&quot;large-tables&quot;</span>, <span class="ident">deprecated</span><span class="op">=</span><span class="string">&quot;`large-tables` is deprecated in favor of `32-column-tables`&quot;</span>)]</span>
+<span class="comment">//#[cfg_attr(feature=&quot;huge-tables&quot;, deprecated=&quot;`huge-tables` is deprecated in favor of `64-column-tables`&quot;)]</span>
+<span class="comment">//#[cfg_attr(feature=&quot;large-tables&quot;, deprecated=&quot;`large-tables` is deprecated in favor of `32-column-tables`&quot;)]</span>
 <span class="attribute">#[<span class="ident">macro_export</span>]</span>
 <span class="macro">macro_rules!</span> <span class="ident">table</span> {
     ($(<span class="macro-nonterminal">$</span><span class="macro-nonterminal">tokens</span>:<span class="ident">tt</span>)<span class="kw-2">*</span>) =&gt; {
@@ -3510,5 +3510,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="diesel" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (a00e130da 2022-01-29)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="diesel" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (27f5d830e 2022-02-02)" ></div>
 </body></html>

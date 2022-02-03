@@ -154,6 +154,14 @@
 <span id="149">149</span>
 <span id="150">150</span>
 <span id="151">151</span>
+<span id="152">152</span>
+<span id="153">153</span>
+<span id="154">154</span>
+<span id="155">155</span>
+<span id="156">156</span>
+<span id="157">157</span>
+<span id="158">158</span>
+<span id="159">159</span>
 </pre><pre class="rust"><code><span class="doccomment">//! A module to evaluate what to do when a commit triggers an error.</span>
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::result::Error</span>;
 
@@ -200,7 +208,10 @@
     <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;mysql&quot;</span>,
     <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sqlite&quot;</span>
 ))]</span>
-<span class="kw">pub</span> <span class="kw">fn</span> <span class="ident">default_process_commit_error</span>(
+<span class="attribute">#[<span class="ident">diesel_derives::__diesel_public_if</span>(
+    <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;i-implement-a-third-party-backend-and-opt-into-breaking-changes&quot;</span>
+)]</span>
+<span class="kw">pub</span>(<span class="kw">crate</span>) <span class="kw">fn</span> <span class="ident">default_process_commit_error</span>(
     <span class="ident">transaction_state</span>: <span class="kw-2">&amp;</span><span class="ident"><span class="kw">super</span>::ValidTransactionManagerStatus</span>,
     <span class="ident">error</span>: <span class="ident">Error</span>,
 ) -&gt; <span class="ident">CommitErrorOutcome</span> {
@@ -248,6 +259,11 @@
 }
 
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">test</span>)]</span>
+<span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">any</span>(
+    <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;i-implement-a-third-party-backend-and-opt-into-breaking-changes&quot;</span>,
+    <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;mysql&quot;</span>,
+    <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;sqlite&quot;</span>
+))]</span>
 <span class="kw">mod</span> <span class="ident">tests</span> {
     <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::CommitErrorOutcome</span>;
     <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::connection::ValidTransactionManagerStatus</span>;
@@ -306,5 +322,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="diesel" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (a00e130da 2022-01-29)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../" data-current-crate="diesel" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (27f5d830e 2022-02-02)" ></div>
 </body></html>
