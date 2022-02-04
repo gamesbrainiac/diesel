@@ -222,11 +222,9 @@
 <span id="217">217</span>
 <span id="218">218</span>
 <span id="219">219</span>
-<span id="220">220</span>
-<span id="221">221</span>
 </pre><pre class="rust"><code><span class="doccomment">//! MySQL specific types</span>
 
-<span class="kw">mod</span> <span class="ident">date_and_time</span>;
+<span class="kw">pub</span>(<span class="kw">super</span>) <span class="kw">mod</span> <span class="ident">date_and_time</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde_json&quot;</span>)]</span>
 <span class="kw">mod</span> <span class="ident">json</span>;
 <span class="kw">mod</span> <span class="ident">numeric</span>;
@@ -239,8 +237,6 @@
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::sql_types</span>::<span class="kw-2">*</span>;
 <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::sql_types</span>::{<span class="self">self</span>, <span class="ident">ops</span>::<span class="kw-2">*</span>};
 <span class="kw">use</span> <span class="ident">byteorder</span>::{<span class="ident">NativeEndian</span>, <span class="ident">WriteBytesExt</span>};
-
-<span class="kw">pub</span> <span class="kw">use</span> <span class="ident">date_and_time</span>::{<span class="ident">MysqlTime</span>, <span class="ident">MysqlTimestampType</span>};
 
 <span class="kw">impl</span> <span class="ident">ToSql</span><span class="op">&lt;</span><span class="ident">TinyInt</span>, <span class="ident">Mysql</span><span class="op">&gt;</span> <span class="kw">for</span> <span class="ident">i8</span> {
     <span class="kw">fn</span> <span class="ident">to_sql</span><span class="op">&lt;</span><span class="lifetime">&#39;b</span><span class="op">&gt;</span>(<span class="kw-2">&amp;</span><span class="lifetime">&#39;b</span> <span class="self">self</span>, <span class="ident">out</span>: <span class="kw-2">&amp;mut</span> <span class="ident">Output</span><span class="op">&lt;</span><span class="lifetime">&#39;b</span>, <span class="lifetime">&#39;_</span>, <span class="ident">Mysql</span><span class="op">&gt;</span>) -&gt; <span class="ident">serialize::Result</span> {
@@ -446,5 +442,5 @@
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;mysql_backend&quot;</span>)]</span>
 <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Datetime</span>;
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="diesel" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (27f5d830e 2022-02-02)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="diesel" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (4e8fb743c 2022-02-03)" ></div>
 </body></html>

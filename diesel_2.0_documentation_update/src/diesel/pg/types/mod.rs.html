@@ -554,19 +554,26 @@
 <span id="549">549</span>
 <span id="550">550</span>
 <span id="551">551</span>
+<span id="552">552</span>
+<span id="553">553</span>
+<span id="554">554</span>
+<span id="555">555</span>
+<span id="556">556</span>
+<span id="557">557</span>
+<span id="558">558</span>
 </pre><pre class="rust"><code><span class="doccomment">//! PostgreSQL specific types</span>
 
 <span class="kw">mod</span> <span class="ident">array</span>;
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">date_and_time</span>;
+<span class="kw">pub</span>(<span class="kw">in</span> <span class="ident"><span class="kw">crate</span>::pg</span>) <span class="kw">mod</span> <span class="ident">date_and_time</span>;
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">floats</span>;
+<span class="kw">pub</span>(<span class="kw">in</span> <span class="ident"><span class="kw">crate</span>::pg</span>) <span class="kw">mod</span> <span class="ident">floats</span>;
 <span class="kw">mod</span> <span class="ident">integers</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde_json&quot;</span>)]</span>
 <span class="kw">mod</span> <span class="ident">json</span>;
 <span class="kw">mod</span> <span class="ident">mac_addr</span>;
 <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
-<span class="kw">pub</span> <span class="kw">mod</span> <span class="ident">money</span>;
+<span class="kw">pub</span>(<span class="kw">in</span> <span class="ident"><span class="kw">crate</span>::pg</span>) <span class="kw">mod</span> <span class="ident">money</span>;
 <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;network-address&quot;</span>)]</span>
 <span class="kw">mod</span> <span class="ident">network_address</span>;
 <span class="kw">mod</span> <span class="ident">numeric</span>;
@@ -583,7 +590,7 @@
     <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::query_builder::QueryId</span>;
     <span class="kw">use</span> <span class="ident"><span class="kw">crate</span>::sql_types::SqlType</span>;
 
-    <span class="doccomment">/// The `OID` SQL type. This is a PostgreSQL specific type.</span>
+    <span class="doccomment">/// The [`OID`] SQL type. This is a PostgreSQL specific type.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ### [`ToSql`] impls</span>
     <span class="doccomment">///</span>
@@ -596,12 +603,13 @@
     <span class="doccomment">/// [`ToSql`]: crate::serialize::ToSql</span>
     <span class="doccomment">/// [`FromSql`]: crate::deserialize::FromSql</span>
     <span class="doccomment">/// [`u32`]: https://doc.rust-lang.org/nightly/std/primitive.u32.html</span>
+    <span class="doccomment">/// [`OID`]: https://www.postgresql.org/docs/current/datatype-oid.html</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;postgres_backend&quot;</span>)]</span>
     <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Default</span>, <span class="ident">QueryId</span>, <span class="ident">SqlType</span>)]</span>
     <span class="attribute">#[<span class="ident">diesel</span>(<span class="ident">postgres_type</span>(<span class="ident">oid</span> <span class="op">=</span> <span class="number">26</span>, <span class="ident">array_oid</span> <span class="op">=</span> <span class="number">1018</span>))]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Oid</span>;
 
-    <span class="doccomment">/// The &quot;timestamp with time zone&quot; SQL type, which PostgreSQL abbreviates</span>
+    <span class="doccomment">/// The [&quot;timestamp with time zone&quot; SQL type][tz], which PostgreSQL abbreviates</span>
     <span class="doccomment">/// to `timestamptz`.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ### [`ToSql`] impls</span>
@@ -619,6 +627,7 @@
     <span class="doccomment">/// [`ToSql`]: crate::serialize::ToSql</span>
     <span class="doccomment">/// [`FromSql`]: crate::deserialize::FromSql</span>
     <span class="doccomment">/// [`PgTimestamp`]: super::super::data_types::PgTimestamp</span>
+    <span class="doccomment">/// [tz]: https://www.postgresql.org/docs/current/datatype-datetime.html</span>
     <span class="attribute">#[<span class="ident">cfg_attr</span>(
         <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;chrono&quot;</span>,
         <span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot; [`chrono::NaiveDateTime`]: chrono::naive::NaiveDateTime&quot;</span>
@@ -637,7 +646,7 @@
     <span class="attribute">#[<span class="ident">diesel</span>(<span class="ident">postgres_type</span>(<span class="ident">oid</span> <span class="op">=</span> <span class="number">1184</span>, <span class="ident">array_oid</span> <span class="op">=</span> <span class="number">1185</span>))]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Timestamptz</span>;
 
-    <span class="doccomment">/// The `Array` SQL type.</span>
+    <span class="doccomment">/// The [`Array`] SQL type.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This wraps another type to represent a SQL array of that type.</span>
     <span class="doccomment">/// Multidimensional arrays are not supported,</span>
@@ -656,11 +665,12 @@
     <span class="doccomment">/// [`FromSql`]: crate::deserialize::FromSql</span>
     <span class="doccomment">/// [Vec]: std::vec::Vec</span>
     <span class="doccomment">/// [slice]: https://doc.rust-lang.org/nightly/std/primitive.slice.html</span>
+    <span class="doccomment">/// [`Array`]: https://www.postgresql.org/docs/current/arrays.html</span>
     <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Default</span>, <span class="ident">QueryId</span>, <span class="ident">SqlType</span>)]</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;postgres_backend&quot;</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Array</span><span class="op">&lt;</span><span class="ident">ST</span>: <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="ident">ST</span>);
 
-    <span class="doccomment">/// The `Range` SQL type.</span>
+    <span class="doccomment">/// The [`Range`] SQL type.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// This wraps another type to represent a SQL range of that type.</span>
     <span class="doccomment">///</span>
@@ -675,6 +685,7 @@
     <span class="doccomment">/// [`ToSql`]: crate::serialize::ToSql</span>
     <span class="doccomment">/// [`FromSql`]: crate::deserialize::FromSql</span>
     <span class="doccomment">/// [bound]: std::collections::Bound</span>
+    <span class="doccomment">/// [`Range`]: https://www.postgresql.org/docs/current/rangetypes.html</span>
     <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Default</span>, <span class="ident">QueryId</span>, <span class="ident">SqlType</span>)]</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;postgres_backend&quot;</span>)]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Range</span><span class="op">&lt;</span><span class="ident">ST</span>: <span class="lifetime">&#39;static</span><span class="op">&gt;</span>(<span class="ident">ST</span>);
@@ -692,7 +703,7 @@
     <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
     <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Tstzrange</span> <span class="op">=</span> <span class="ident">Range</span><span class="op">&lt;</span><span class="ident"><span class="kw">crate</span>::sql_types::Timestamptz</span><span class="op">&gt;</span>;
 
-    <span class="doccomment">/// The `Record` (a.k.a. tuple) SQL type.</span>
+    <span class="doccomment">/// The [`Record`] (a.k.a. tuple) SQL type.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ### [`ToSql`] impls</span>
     <span class="doccomment">///</span>
@@ -729,6 +740,7 @@
     <span class="doccomment">/// for details.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`WriteTuple`]: super::super::super::serialize::WriteTuple</span>
+    <span class="doccomment">/// [`Record`]: https://www.postgresql.org/docs/current/rowtypes.html</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;postgres_backend&quot;</span>)]</span>
     <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Default</span>, <span class="ident">QueryId</span>, <span class="ident">SqlType</span>)]</span>
     <span class="attribute">#[<span class="ident">diesel</span>(<span class="ident">postgres_type</span>(<span class="ident">oid</span> <span class="op">=</span> <span class="number">2249</span>, <span class="ident">array_oid</span> <span class="op">=</span> <span class="number">2287</span>))]</span>
@@ -746,7 +758,7 @@
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;postgres_backend&quot;</span>)]</span>
     <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">BigSerial</span> <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::sql_types::BigInt</span>;
 
-    <span class="doccomment">/// The `UUID` SQL type. This type can only be used with `feature = &quot;uuid&quot;`</span>
+    <span class="doccomment">/// The [`UUID`] SQL type. This type can only be used with `feature = &quot;uuid&quot;`</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ### [`ToSql`] impls</span>
     <span class="doccomment">///</span>
@@ -759,6 +771,7 @@
     <span class="doccomment">/// [`ToSql`]: crate::serialize::ToSql</span>
     <span class="doccomment">/// [`FromSql`]: crate::deserialize::FromSql</span>
     <span class="doccomment">/// [Uuid]: https://docs.rs/uuid/*/uuid/struct.Uuid.html</span>
+    <span class="doccomment">/// [`UUID`]: https://www.postgresql.org/docs/current/datatype-uuid.html</span>
     <span class="attribute">#[<span class="ident">cfg</span>(<span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;postgres_backend&quot;</span>)]</span>
     <span class="attribute">#[<span class="ident">derive</span>(<span class="ident">Debug</span>, <span class="ident">Clone</span>, <span class="ident">Copy</span>, <span class="ident">Default</span>, <span class="ident">QueryId</span>, <span class="ident">SqlType</span>)]</span>
     <span class="attribute">#[<span class="ident">diesel</span>(<span class="ident">postgres_type</span>(<span class="ident">oid</span> <span class="op">=</span> <span class="number">2950</span>, <span class="ident">array_oid</span> <span class="op">=</span> <span class="number">2951</span>))]</span>
@@ -771,7 +784,7 @@
     <span class="attribute">#[<span class="ident">doc</span>(<span class="ident">hidden</span>)]</span>
     <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Bpchar</span> <span class="op">=</span> <span class="ident"><span class="kw">crate</span>::sql_types::VarChar</span>;
 
-    <span class="doccomment">/// The `jsonb` SQL type.  This type can only be used with `feature =</span>
+    <span class="doccomment">/// The [`jsonb`] SQL type.  This type can only be used with `feature =</span>
     <span class="doccomment">/// &quot;serde_json&quot;`</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// `jsonb` offers [several advantages][adv] over regular JSON:</span>
@@ -790,7 +803,7 @@
     <span class="doccomment">/// &gt; `jsonb`, unless there are quite specialized needs, such as legacy</span>
     <span class="doccomment">/// &gt; assumptions about ordering of object keys.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// [adv]: https://www.postgresql.org/docs/9.6/static/datatype-json.html</span>
+    <span class="doccomment">/// [adv]: https://www.postgresql.org/docs/current/static/datatype-json.html</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ### [`ToSql`] impls</span>
     <span class="doccomment">///</span>
@@ -802,6 +815,7 @@
     <span class="doccomment">///</span>
     <span class="doccomment">/// [`ToSql`]: crate::serialize::ToSql</span>
     <span class="doccomment">/// [`FromSql`]: crate::deserialize::FromSql</span>
+    <span class="doccomment">/// [`jsonb`]: https://www.postgresql.org/docs/current/datatype-json.html</span>
     <span class="attribute">#[<span class="ident">cfg_attr</span>(
         <span class="ident">feature</span> <span class="op">=</span> <span class="string">&quot;serde_json&quot;</span>,
         <span class="ident">doc</span> <span class="op">=</span> <span class="string">&quot;[`serde_json::Value`]: serde_json::value::Value&quot;</span>
@@ -856,7 +870,7 @@
     <span class="attribute">#[<span class="ident">diesel</span>(<span class="ident">postgres_type</span>(<span class="ident">oid</span> <span class="op">=</span> <span class="number">3802</span>, <span class="ident">array_oid</span> <span class="op">=</span> <span class="number">3807</span>))]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Jsonb</span>;
 
-    <span class="doccomment">/// The PostgreSQL [Money](https://www.postgresql.org/docs/9.1/static/datatype-money.html) type.</span>
+    <span class="doccomment">/// The PostgreSQL [Money](https://www.postgresql.org/docs/current/static/datatype-money.html) type.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ### [`ToSql`] impls</span>
     <span class="doccomment">///</span>
@@ -905,7 +919,7 @@
     <span class="attribute">#[<span class="ident">diesel</span>(<span class="ident">postgres_type</span>(<span class="ident">oid</span> <span class="op">=</span> <span class="number">790</span>, <span class="ident">array_oid</span> <span class="op">=</span> <span class="number">791</span>))]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Money</span>;
 
-    <span class="doccomment">/// The [`MACADDR`](https://www.postgresql.org/docs/9.6/static/datatype-net-types.html) SQL type.</span>
+    <span class="doccomment">/// The [`MACADDR`](https://www.postgresql.org/docs/current/static/datatype-net-types.html) SQL type.</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ### [`ToSql`] impls</span>
     <span class="doccomment">///</span>
@@ -954,7 +968,7 @@
     <span class="doccomment">/// Alias for `MacAddr` to be able to use it with `infer_schema`.</span>
     <span class="kw">pub</span> <span class="kw">type</span> <span class="ident">Macaddr</span> <span class="op">=</span> <span class="ident">MacAddr</span>;
 
-    <span class="doccomment">/// The [`INET`](https://www.postgresql.org/docs/9.6/static/datatype-net-types.html) SQL type. This type can only be used with `feature = &quot;network-address&quot;`</span>
+    <span class="doccomment">/// The [`INET`](https://www.postgresql.org/docs/current/static/datatype-net-types.html) SQL type. This type can only be used with `feature = &quot;network-address&quot;`</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ### [`ToSql`] impls</span>
     <span class="doccomment">///</span>
@@ -1012,7 +1026,7 @@
     <span class="attribute">#[<span class="ident">diesel</span>(<span class="ident">postgres_type</span>(<span class="ident">oid</span> <span class="op">=</span> <span class="number">869</span>, <span class="ident">array_oid</span> <span class="op">=</span> <span class="number">1041</span>))]</span>
     <span class="kw">pub</span> <span class="kw">struct</span> <span class="ident">Inet</span>;
 
-    <span class="doccomment">/// The [`CIDR`](https://www.postgresql.org/docs/9.6/static/datatype-net-types.html) SQL type. This type can only be used with `feature = &quot;network-address&quot;`</span>
+    <span class="doccomment">/// The [`CIDR`](https://www.postgresql.org/docs/postgresql/static/datatype-net-types.html) SQL type. This type can only be used with `feature = &quot;network-address&quot;`</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// ### [`ToSql`] impls</span>
     <span class="doccomment">///</span>
@@ -1106,5 +1120,5 @@
     }
 }
 </code></pre></div>
-</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="diesel" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (27f5d830e 2022-02-02)" ></div>
+</section><section id="search" class="content hidden"></section></div></main><div id="rustdoc-vars" data-root-path="../../../../" data-current-crate="diesel" data-themes="ayu,dark,light" data-resource-suffix="" data-rustdoc-version="1.60.0-nightly (4e8fb743c 2022-02-03)" ></div>
 </body></html>
