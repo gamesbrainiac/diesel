@@ -1255,6 +1255,66 @@
 <span id="1254">1254</span>
 <span id="1255">1255</span>
 <span id="1256">1256</span>
+<span id="1257">1257</span>
+<span id="1258">1258</span>
+<span id="1259">1259</span>
+<span id="1260">1260</span>
+<span id="1261">1261</span>
+<span id="1262">1262</span>
+<span id="1263">1263</span>
+<span id="1264">1264</span>
+<span id="1265">1265</span>
+<span id="1266">1266</span>
+<span id="1267">1267</span>
+<span id="1268">1268</span>
+<span id="1269">1269</span>
+<span id="1270">1270</span>
+<span id="1271">1271</span>
+<span id="1272">1272</span>
+<span id="1273">1273</span>
+<span id="1274">1274</span>
+<span id="1275">1275</span>
+<span id="1276">1276</span>
+<span id="1277">1277</span>
+<span id="1278">1278</span>
+<span id="1279">1279</span>
+<span id="1280">1280</span>
+<span id="1281">1281</span>
+<span id="1282">1282</span>
+<span id="1283">1283</span>
+<span id="1284">1284</span>
+<span id="1285">1285</span>
+<span id="1286">1286</span>
+<span id="1287">1287</span>
+<span id="1288">1288</span>
+<span id="1289">1289</span>
+<span id="1290">1290</span>
+<span id="1291">1291</span>
+<span id="1292">1292</span>
+<span id="1293">1293</span>
+<span id="1294">1294</span>
+<span id="1295">1295</span>
+<span id="1296">1296</span>
+<span id="1297">1297</span>
+<span id="1298">1298</span>
+<span id="1299">1299</span>
+<span id="1300">1300</span>
+<span id="1301">1301</span>
+<span id="1302">1302</span>
+<span id="1303">1303</span>
+<span id="1304">1304</span>
+<span id="1305">1305</span>
+<span id="1306">1306</span>
+<span id="1307">1307</span>
+<span id="1308">1308</span>
+<span id="1309">1309</span>
+<span id="1310">1310</span>
+<span id="1311">1311</span>
+<span id="1312">1312</span>
+<span id="1313">1313</span>
+<span id="1314">1314</span>
+<span id="1315">1315</span>
+<span id="1316">1316</span>
 </pre><pre class="rust"><code><span class="doccomment">//! PostgreSQL specific expression methods</span>
 
 <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::operators</span>::<span class="kw-2">*</span>;
@@ -2497,6 +2557,66 @@
         <span class="ident">T</span>: <span class="ident">AsExpression</span><span class="op">&lt;</span><span class="ident">Jsonb</span><span class="op">&gt;</span>,
     {
         <span class="ident">Grouped</span>(<span class="ident">ConcatJsonb::new</span>(<span class="self">self</span>, <span class="ident">other</span>.<span class="ident">as_expression</span>()))
+    }
+    <span class="doccomment">/// Creates a PostgreSQL `?` expression.</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// This operator checks if the right hand side string exists as a top-level key within the JSON</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # Example</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// ```rust</span>
+    <span class="doccomment">/// # include!(&quot;../../doctest_setup.rs&quot;);</span>
+    <span class="doccomment">/// #</span>
+    <span class="doccomment">/// # table! {</span>
+    <span class="doccomment">/// #    contacts {</span>
+    <span class="doccomment">/// #        id -&gt; Integer,</span>
+    <span class="doccomment">/// #        name -&gt; VarChar,</span>
+    <span class="doccomment">/// #        address -&gt; Jsonb,</span>
+    <span class="doccomment">/// #    }</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">/// #</span>
+    <span class="doccomment">/// # fn main() {</span>
+    <span class="doccomment">/// #     run_test().unwrap();</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// # #[cfg(feature = &quot;serde_json&quot;)]</span>
+    <span class="doccomment">/// # fn run_test() -&gt; QueryResult&lt;()&gt; {</span>
+    <span class="doccomment">/// #     use self::contacts::dsl::*;</span>
+    <span class="doccomment">/// #     let conn = &amp;mut establish_connection();</span>
+    <span class="doccomment">/// #     conn.execute(&quot;DROP TABLE IF EXISTS contacts&quot;).unwrap();</span>
+    <span class="doccomment">/// #     conn.execute(&quot;CREATE TABLE contacts (</span>
+    <span class="doccomment">/// #         id SERIAL PRIMARY KEY,</span>
+    <span class="doccomment">/// #         name VARCHAR NOT NULL,</span>
+    <span class="doccomment">/// #         address JSONB NOT NULL</span>
+    <span class="doccomment">/// #     )&quot;).unwrap();</span>
+    <span class="doccomment">/// #</span>
+    <span class="doccomment">/// let santas_address: serde_json::Value = serde_json::json!({</span>
+    <span class="doccomment">///     &quot;street&quot;: &quot;Article Circle Expressway 1&quot;,</span>
+    <span class="doccomment">///     &quot;city&quot;: &quot;North Pole&quot;,</span>
+    <span class="doccomment">///     &quot;postcode&quot;: &quot;99705&quot;,</span>
+    <span class="doccomment">///     &quot;state&quot;: &quot;Alaska&quot;</span>
+    <span class="doccomment">/// });</span>
+    <span class="doccomment">/// diesel::insert_into(contacts)</span>
+    <span class="doccomment">///     .values((name.eq(&quot;Claus&quot;), address.eq(&amp;santas_address)))</span>
+    <span class="doccomment">///     .execute(conn)?;</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// let key_exists = contacts.select(address.has_key(&quot;street&quot;)).get_result::&lt;bool&gt;(conn)?;</span>
+    <span class="doccomment">/// assert!(key_exists);</span>
+    <span class="doccomment">///</span>
+    <span class="doccomment">/// let santas_with_address_postcode = contacts.select(id).filter(address.has_key(&quot;postcode&quot;)).get_result::&lt;i32&gt;(conn)?;</span>
+    <span class="doccomment">/// assert_eq!(1, santas_with_address_postcode);</span>
+    <span class="doccomment">/// #     Ok(())</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">/// # #[cfg(not(feature = &quot;serde_json&quot;))]</span>
+    <span class="doccomment">/// # fn run_test() -&gt; QueryResult&lt;()&gt; {</span>
+    <span class="doccomment">/// #     Ok(())</span>
+    <span class="doccomment">/// # }</span>
+    <span class="doccomment">/// ```</span>
+    <span class="kw">fn</span> <span class="ident">has_key</span><span class="op">&lt;</span><span class="ident">T</span><span class="op">&gt;</span>(<span class="self">self</span>, <span class="ident">other</span>: <span class="ident">T</span>) -&gt; <span class="ident">dsl::HasKeyJsonb</span><span class="op">&lt;</span><span class="self">Self</span>, <span class="ident">T</span><span class="op">&gt;</span>
+    <span class="kw">where</span>
+        <span class="ident">T</span>: <span class="ident">AsExpression</span><span class="op">&lt;</span><span class="ident">VarChar</span><span class="op">&gt;</span>,
+    {
+        <span class="ident">Grouped</span>(<span class="ident">HasKeyJsonb::new</span>(<span class="self">self</span>, <span class="ident">other</span>.<span class="ident">as_expression</span>()))
     }
 }
 
