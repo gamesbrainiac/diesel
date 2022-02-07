@@ -1315,6 +1315,7 @@
 <span id="1314">1314</span>
 <span id="1315">1315</span>
 <span id="1316">1316</span>
+<span id="1317">1317</span>
 </pre><pre class="rust"><code><span class="doccomment">//! PostgreSQL specific expression methods</span>
 
 <span class="kw">use</span> <span class="ident"><span class="kw">super</span>::operators</span>::<span class="kw-2">*</span>;
@@ -2558,9 +2559,10 @@
     {
         <span class="ident">Grouped</span>(<span class="ident">ConcatJsonb::new</span>(<span class="self">self</span>, <span class="ident">other</span>.<span class="ident">as_expression</span>()))
     }
+
     <span class="doccomment">/// Creates a PostgreSQL `?` expression.</span>
     <span class="doccomment">///</span>
-    <span class="doccomment">/// This operator checks if the right hand side string exists as a top-level key within the JSON</span>
+    <span class="doccomment">/// This operator checks if the right hand side string exists as a top-level key within the JSONB</span>
     <span class="doccomment">///</span>
     <span class="doccomment">/// # Example</span>
     <span class="doccomment">///</span>
