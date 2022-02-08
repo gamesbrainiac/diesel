@@ -85,3 +85,7 @@ pub type ConcatJsonb<Lhs, Rhs> = Grouped<super::operators::ConcatJsonb<Lhs, AsEx
 /// The return type of `lsh.has_key(rhs)`
 pub type HasKeyJsonb<Lhs, Rhs> =
     Grouped<super::operators::HasKeyJsonb<Lhs, AsExprOf<Rhs, VarChar>>>;
+
+/// The return type of `lsh.retrieve_as_object(rhs)`
+pub type RetrieveAsObjectJsonb<Lhs, Rhs, ST> =
+    Grouped<super::operators::RetrieveAsObjectJsonb<Lhs, AsExprOf<Rhs, ST>>>;

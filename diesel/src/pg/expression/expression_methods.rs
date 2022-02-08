@@ -4,7 +4,7 @@ use super::operators::*;
 use crate::dsl;
 use crate::expression::grouped::Grouped;
 use crate::expression::{AsExpression, Expression, IntoSql, TypedExpressionType};
-use crate::sql_types::{Array, Cidr, Inet, Jsonb, Nullable, Range, SqlType, Text};
+use crate::sql_types::{Array, Cidr, Inet, Integer, Json, Jsonb, Nullable, Range, SqlType, Text};
 
 /// PostgreSQL specific methods which are present on all expressions.
 pub trait PgExpressionMethods: Expression + Sized {
@@ -1315,3 +1315,123 @@ where
 pub trait JsonbOrNullableJsonb {}
 impl JsonbOrNullableJsonb for Jsonb {}
 impl JsonbOrNullableJsonb for Nullable<Jsonb> {}
+
+/// PostgreSQL specific methods present on JSON and JSONB expressions.
+pub trait PgAnyJsonExpressionMethods: Expression + Sized {
+    /// Creates a PostgreSQL `->` expression.
+    ///
+    /// This operator extracts the value associated with the given key, that is provided on the
+    /// Right Hand Side of the operator.
+    ///
+    /// Extracts n'th element of JSON array (array elements are indexed from zero, but negative integers count from the end).
+    /// Extracts JSON object field with the given key.
+    /// # Example
+    ///
+    /// ```rust
+    /// # include!("../../doctest_setup.rs");
+    /// #
+    /// # table! {
+    /// #    contacts {
+    /// #        id -> Integer,
+    /// #        name -> VarChar,
+    /// #        address -> Jsonb,
+    /// #    }
+    /// # }
+    /// #
+    /// # fn main() {
+    /// #     run_test().unwrap();
+    /// # }
+    ///
+    /// # #[cfg(feature = "serde_json")]
+    /// # fn run_test() -> QueryResult<()> {
+    /// #     use self::contacts::dsl::*;
+    /// #     let conn = &mut establish_connection();
+    /// #     conn.execute("DROP TABLE IF EXISTS contacts").unwrap();
+    /// #     conn.execute("CREATE TABLE contacts (
+    /// #         id SERIAL PRIMARY KEY,
+    /// #         name VARCHAR NOT NULL,
+    /// #         address JSONB NOT NULL
+    /// #     )").unwrap();
+    /// #
+    /// let santas_address: serde_json::Value = serde_json::json!({
+    ///     "street": "Article Circle Expressway 1",
+    ///     "city": "North Pole",
+    ///     "postcode": "99705",
+    ///     "state": "Alaska"
+    /// });
+    /// diesel::insert_into(contacts)
+    ///     .values((name.eq("Claus"), address.eq(&santas_address)))
+    ///     .execute(conn)?;
+    ///
+    /// let santas_postcode = contacts.select(address.retrieve_as_object("postcode")).get_result::<serde_json::Value>(conn)?;
+    /// assert_eq!(santas_postcode, serde_json::json!("99705"));
+    ///
+    ///
+    /// let robert_downey_jr_addresses: serde_json::Value = serde_json::json!([
+    ///     {
+    ///         "street": "Somewhere In La 251",
+    ///         "city": "Los Angeles",
+    ///         "postcode": "12231223",
+    ///         "state": "California"
+    ///     },
+    ///     {
+    ///         "street": "Somewhere In Ny 251",
+    ///         "city": "New York",
+    ///         "postcode": "3213212",
+    ///         "state": "New York"
+    ///     }
+    /// ]);
+    ///
+    /// diesel::insert_into(contacts)
+    ///     .values((name.eq("Robert Downey Jr."), address.eq(&robert_downey_jr_addresses)))
+    ///     .execute(conn)?;
+    ///
+    /// let roberts_second_address_in_db = contacts
+    ///                             .filter(name.eq("Robert Downey Jr."))
+    ///                             .select(address.retrieve_as_object(1))
+    ///                             .get_result::<serde_json::Value>(conn)?;
+    ///
+    /// let roberts_second_address = serde_json::json!({
+    ///         "street": "Somewhere In Ny 251",
+    ///         "city": "New York",
+    ///         "postcode": "3213212",
+    ///         "state": "New York"
+    /// });
+    /// assert_eq!(roberts_second_address, roberts_second_address_in_db);
+    /// #     Ok(())
+    /// # }
+    /// # #[cfg(not(feature = "serde_json"))]
+    /// # fn run_test() -> QueryResult<()> {
+    /// #     Ok(())
+    /// # }
+    /// ```
+    fn retrieve_as_object<T, ST>(self, other: T) -> dsl::RetrieveAsObjectJsonb<Self, T, ST>
+    where
+        ST: SqlType + TypedExpressionType,
+        T: AsExpression<ST>,
+    {
+        Grouped(RetrieveAsObjectJsonb::new(self, other.as_expression()))
+    }
+}
+
+#[doc(hidden)]
+/// Marker trait used to implement `PgAnyJsonExpressionMethods` on the appropriate types.
+pub trait TextOrInteger {}
+impl TextOrInteger for Text {}
+impl TextOrInteger for Integer {}
+
+#[doc(hidden)]
+/// Marker trait used to implement `PgAnyJsonExpressionMethods` on the appropriate types.
+pub trait JsonOrNullableJsonOrJsonbOrNullableJsonb {}
+impl JsonOrNullableJsonOrJsonbOrNullableJsonb for Json {}
+impl JsonOrNullableJsonOrJsonbOrNullableJsonb for Nullable<Json> {}
+impl JsonOrNullableJsonOrJsonbOrNullableJsonb for Jsonb {}
+impl JsonOrNullableJsonOrJsonbOrNullableJsonb for Nullable<Jsonb> {}
+
+impl<T> PgAnyJsonExpressionMethods for T
+where
+    Self::SqlType: JsonOrNullableJsonOrJsonbOrNullableJsonb,
+    T: Expression,
+    T::SqlType: TextOrInteger,
+{
+}
